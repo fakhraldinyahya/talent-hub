@@ -1,0 +1,567 @@
+/**
+ * النمط الرئيسي لـ Talent Hub
+ */
+
+/* متغيرات CSS */
+:root {
+    --default-font: "Roboto", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  --heading-font: "Raleway", sans-serif;
+  --nav-font: "Poppins", sans-serif;
+    --primary-color: #5D5CDE;
+    --secondary-color: #6c757d;
+    --success-color: #28a745;
+    --danger-color: #dc3545;
+    --warning-color: #ffc107;
+    --info-color: #17a2b8;
+    --light-color: #f8f9fa;
+    --dark-color: #343a40;
+    --body-bg: #ffffff;
+    --body-color: #212529;
+    --card-bg: #ffffff;
+    --border-color: #dee2e6;
+    --input-bg: #ffffff;
+    --input-border: #ced4da;
+    --shadow-color: rgba(0, 0, 0, 0.1);
+    --header-height: 60px;
+    --footer-height: 150px;
+    --sidebar-width: 250px;
+    --transition-speed: 0.3s;
+    --background-color: #e9e8e6;
+    --default-color: #444444;
+    --accent-color: #34b7a7;
+}
+
+/* نمط الوضع المظلم */
+.dark-mode {
+    --primary-color: #6e6df1;
+    --secondary-color: #adb5bd;
+    --body-bg: #181818;
+    --body-color: #f8f9fa;
+    --card-bg: #282828;
+    --border-color: #444;
+    --input-bg: #333;
+    --input-border: #555;
+    --shadow-color: rgba(0, 0, 0, 0.2);
+}
+
+/* العناصر الأساسية */
+body {
+    font-family: 'Tajawal', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: var(--background-color);
+    color: var(--body-color);
+    transition: background-color var(--transition-speed) ease, color var(--transition-speed) ease;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+main {
+    flex: 1;
+}
+
+/* الروابط */
+a {
+    color: var(--primary-color);
+    text-decoration: none;
+    transition: color var(--transition-speed) ease;
+}
+
+a:hover {
+    color: var(--primary-color);
+    text-decoration: underline;
+}
+
+/* البطاقات */
+.card {
+    background-color: var(--card-bg);
+    border-color: var(--border-color);
+    transition: background-color var(--transition-speed) ease, border-color var(--transition-speed) ease;
+}
+
+.card-header, .card-footer {
+    background-color: rgba(0, 0, 0, 0.03);
+    border-color: var(--border-color);
+}
+
+.dark-mode .card-header, .dark-mode .card-footer {
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+/* النماذج */
+.form-control, .form-select {
+    background-color: var(--input-bg);
+    border-color: var(--input-border);
+    color: var(--body-color);
+    transition: background-color var(--transition-speed) ease, border-color var(--transition-speed) ease, color var(--transition-speed) ease;
+}
+
+.form-control:focus, .form-select:focus {
+    background-color: var(--input-bg);
+    color: var(--body-color);
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 0.25rem rgba(93, 92, 222, 0.25);
+}
+
+.dark-mode .form-control::placeholder {
+    color: #aaa;
+}
+
+/* الأزرار */
+.btn-primary {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+.btn-primary:hover, .btn-primary:focus {
+    background-color: var(--primary-color);
+    border-color: darken(var(--primary-color), 10%);
+}
+
+.btn-outline-primary {
+    color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+.btn-outline-primary:hover, .btn-outline-primary:focus {
+    color: #fff;
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+/* الظلال */
+.shadow-sm {
+    box-shadow: 0 .125rem .25rem var(--shadow-color) !important;
+}
+
+.shadow {
+    box-shadow: 0 .5rem 1rem var(--shadow-color) !important;
+}
+
+/* شريط التنقل */
+.navbar {
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.navbar-brand {
+    font-weight: bold;
+    font-size: 1.5rem;
+}
+
+.nav-link {
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+}
+
+.navbar .nav-link:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* الصور المصغرة للملف الشخصي */
+.profile-thumbnail {
+    width: 32px;
+    height: 32px;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
+.profile-thumbnail-lg {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 3px solid var(--light-color);
+}
+
+/* بطاقات المنشورات */
+.post-card {
+    transition: transform 0.2s ease;
+}
+
+.post-card:hover {
+    transform: translateY(-5px);
+}
+
+.post-card .card-img-top {
+    height: 200px;
+    object-fit: cover;
+}
+
+/* تنسيق محتوى المنشور */
+.post-content {
+    white-space: pre-line;
+}
+
+/* التعليقات */
+.comment-item {
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 1rem;
+    margin-bottom: 1rem;
+}
+
+.comment-item:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+}
+
+/* الدردشة */
+.chat-container {
+    display: flex;
+    flex-direction: column;
+    height: 500px;
+}
+
+.chat-messages {
+    flex: 1;
+    overflow-y: auto;
+    padding: 1rem;
+}
+
+.chat-message {
+    margin-bottom: 1rem;
+    max-width: 75%;
+}
+
+.chat-message-sender {
+    align-self: flex-end;
+    background-color: var(--primary-color);
+    color: white;
+    border-radius: 18px 18px 0 18px;
+}
+
+.chat-message-receiver {
+    align-self: flex-start;
+    background-color: #f0f0f0;
+    border-radius: 18px 18px 18px 0;
+}
+
+.dark-mode .chat-message-receiver {
+    background-color: #333;
+}
+
+.chat-input {
+    display: flex;
+    padding: 0.5rem;
+    border-top: 1px solid var(--border-color);
+}
+
+.chat-input input {
+    flex: 1;
+    border-radius: 20px;
+    padding-left: 1rem;
+}
+
+/* تخطيط الملف الشخصي */
+.profile-header {
+    position: relative;
+    background-color: var(--primary-color);
+    height: 150px;
+    border-radius: 0.25rem 0.25rem 0 0;
+}
+
+.profile-avatar {
+    position: absolute;
+    bottom: -50px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    border: 4px solid white;
+    background-color: white;
+}
+a:hover {
+    text-decoration: none;  
+}
+  .light-background {
+    --background-color: #e9e8e6;
+    --surface-color: #ffffff;
+  }
+  .footer .social-links a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 1px solid color-mix(in srgb, var(--default-color), transparent 50%);
+    font-size: 16px;
+    color: color-mix(in srgb, var(--default-color), transparent 50%);
+    margin: 0 5px;
+    transition: 0.3s;
+  }
+  
+  .footer .social-links a:hover {
+    color: var(--accent-color);
+    border-color: var(--accent-color);
+  }
+  .footer{
+  color: var(--default-color) !important;
+  background-color: var(--background-color) !important;
+  font-size: 14px;
+  padding: 40px 0;
+  position: relative;
+}
+.header {
+    color: var(--default-color);
+    background-color: var(--background-color);
+    padding: 15px 0;
+    transition: all 0.5s;
+    z-index: 997;
+    box-shadow: 0px 0 18px rgba(0, 0, 0, 0.1);
+  }
+
+.profile-details {
+    padding-top: 60px;
+    text-align: center;
+}
+
+/* تنسيق القوائم الجانبية */
+.sidebar {
+    position: sticky;
+    top: 1rem;
+}
+
+.sidebar .nav-link {
+    padding: 0.5rem 1rem;
+    border-radius: 0.25rem;
+    margin-bottom: 0.25rem;
+}
+
+.sidebar .nav-link:hover {
+    background-color: rgba(93, 92, 222, 0.1);
+}
+
+.sidebar .nav-link.active {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+/* الإشعارات */
+.notification-badge {
+    position: absolute;
+    top: 0;
+    right: 0;
+    transform: translate(50%, -50%);
+    border-radius: 50%;
+    width: 18px;
+    height: 18px;
+    font-size: 0.75rem;
+    line-height: 18px;
+    text-align: center;
+}
+
+/* التذييل */
+footer {
+    margin-top: auto;
+    border-top: 1px solid var(--border-color);
+}
+
+/* تصميم متجاوب */
+@media (max-width: 992px) {
+    .sidebar {
+        position: static;
+        margin-bottom: 1rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .container {
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+    
+    .chat-message {
+        max-width: 85%;
+    }
+    
+    .profile-header {
+        height: 120px;
+    }
+    
+    .profile-avatar {
+        width: 80px;
+        height: 80px;
+        bottom: -40px;
+    }
+    
+    .profile-details {
+        padding-top: 50px;
+    }
+}
+
+/* تحميل الصور البطيء */
+.lazy-load {
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.lazy-load.loaded {
+    opacity: 1;
+}
+
+/* ملء الشاشة للعرض التقديمي */
+.fullscreen-bg {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    overflow: hidden;
+    z-index: -1;
+    background-color: var(--dark-color);
+}
+
+/* رسوم متحركة */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.fade-in {
+    animation: fadeIn 0.5s ease-in;
+}
+
+/* تنسيق عناصر معينة في الوضع المظلم */
+.dark-mode .table {
+    color: var(--body-color);
+}
+
+.dark-mode .table-light {
+    color: var(--dark-color);
+}
+
+.dark-mode .modal-content {
+    background-color: var(--card-bg);
+    color: var(--body-color);
+}
+
+.dark-mode .close {
+    color: var(--body-color);
+}
+
+.dark-mode .dropdown-menu {
+    background-color: var(--card-bg);
+    border-color: var(--border-color);
+}
+
+.dark-mode .dropdown-item {
+    color: var(--body-color);
+}
+
+.dark-mode .dropdown-item:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* أنماط RTL */
+[dir="rtl"] .ms-auto {
+    margin-right: auto !important;
+    margin-left: 0 !important;
+}
+
+[dir="rtl"] .ms-1 {
+    margin-right: 0.25rem !important;
+    margin-left: 0 !important;
+}
+
+[dir="rtl"] .ms-2 {
+    margin-right: 0.5rem !important;
+    margin-left: 0 !important;
+}
+
+[dir="rtl"] .ms-3 {
+    margin-right: 1rem !important;
+    margin-left: 0 !important;
+}
+
+[dir="rtl"] .me-auto {
+    margin-left: auto !important;
+    margin-right: 0 !important;
+}
+
+[dir="rtl"] .me-1 {
+    margin-left: 0.25rem !important;
+    margin-right: 0 !important;
+}
+
+[dir="rtl"] .me-2 {
+    margin-left: 0.5rem !important;
+    margin-right: 0 !important;
+}
+
+[dir="rtl"] .me-3 {
+    margin-left: 1rem !important;
+    margin-right: 0 !important;
+}
+
+.hero {
+    width: 100%;
+    min-height: calc(100vh - 82px);
+    position: relative;
+    padding: 80px 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  @media (max-width: 1200px) {
+    .hero {
+      min-height: calc(100vh - 68px);
+    }
+  }
+  
+  .hero img {
+    position: absolute;
+    inset: 0;
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: 1;
+  }
+  
+  .hero .container {
+    position: relative;
+    z-index: 3;
+  }
+  
+  .hero h2 {
+    margin: 0;
+    font-size: 48px;
+    font-weight: 700;
+  }
+  
+  .hero p {
+    margin: 10px 0 0 0;
+    font-size: 24px;
+    color: var(--heading-color);
+  }
+  
+  .hero .btn-get-started {
+    color: var(--contrast-color);
+    background: var(--accent-color);
+    font-family: var(--heading-font);
+    text-transform: uppercase;
+    font-weight: 600;
+    font-size: 12px;
+    letter-spacing: 1px;
+    display: inline-block;
+    padding: 12px 40px;
+    border-radius: 50px;
+    transition: 0.5s;
+  }
+  
+  .hero .btn-get-started:hover {
+    background: color-mix(in srgb, var(--accent-color) 90%, white 20%);
+  }
+  .scroll-top:hover {
+    background-color: color-mix(in srgb, var(--accent-color), transparent 20%);
+    color: #ffffff;
+  }
+  .scroll-top {
+    color: #ffffff;
+    background-color: var(--accent-color);
+    width: 44px;
+    height: 44px;
+    border-radius: 50px;
+    transition: all 0.4s;
+  }

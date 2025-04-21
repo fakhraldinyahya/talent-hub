@@ -1,0 +1,50 @@
+# تمكين محرك إعادة الكتابة
+RewriteEngine On
+
+# منع عرض محتويات المجلدات
+Options -Indexes
+
+# إعادة كتابة الـ URL للصفحة الرئيسية
+RewriteRule ^$ index.php [L]
+
+# توجيه أي محاولة للوصول إلى ملفات PHP في مجلد classes إلى الصفحة الرئيسية
+RewriteRule ^classes/.*\.php$ index.php [R=403,L]
+
+# توجيه أي محاولة للوصول إلى ملفات PHP في مجلد config إلى الصفحة الرئيسية
+RewriteRule ^config/.*\.php$ index.php [R=403,L]
+
+# منع الوصول المباشر إلى ملفات includes
+RewriteRule ^includes/.*\.php$ index.php [R=403,L]
+
+# منع الوصول المباشر إلى ملف server.php
+RewriteRule ^websocket/server\.php$ index.php [R=403,L]
+
+# تعيين صفحة الخطأ 404
+ErrorDocument 404 /talent-hub/404.php
+
+# إجبار HTTPS (يجب تفعيله على الخادم الحقيقي)
+# RewriteCond %{HTTPS} off
+# RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+# ضغط الملفات
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/plain text/xml text/css application/javascript application/json
+</IfModule>
+
+# تعيين منطقة زمنية افتراضية
+SetEnv TZ Asia/Riyadh
+
+# تعيين ترميز الملفات
+AddDefaultCharset UTF-8
+
+# منع الوصول إلى ملفات معينة
+<FilesMatch "^\.">
+  Order allow,deny
+  Deny from all
+</FilesMatch>
+
+# حماية ملف .htaccess
+<Files .htaccess>
+  Order allow,deny
+  Deny from all
+</Files>

@@ -174,7 +174,7 @@ $page_title = 'إدارة المجموعة: ' . $group_data->name;
 require_once '../includes/header.php';
 ?>
 
-<div class="container mt-5">
+<div class="container mt-3">
     <div class="row">
         <div class="col-md-8 offset-md-2">
             <div class="d-flex justify-content-between align-items-center mb-4">

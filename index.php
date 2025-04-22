@@ -1,20 +1,10 @@
 <?php
 require_once 'config/config.php';
 require_once 'config/db.php';
-require_once 'classes/Post.php';
-require_once 'classes/User.php';
 
 // إنشاء كائنات الفئات
 $database = new Database();
-$post = new Post($database);
-$user = new User($database);
 
-// الحصول على أحدث المنشورات للصفحة الرئيسية
-$posts = $post->getLimitedPosts();
-
-// الحصول على المستخدمين المميزين
-$featured_users = null;
-// $featured_users = $user->getFeaturedUsers(4);
 
 // تعيين عنوان الصفحة
 $page_title = 'الصفحة الرئيسية';
@@ -24,40 +14,26 @@ require_once 'includes/header.php';
 
 
 <!-- Hero Section -->
-<section id="hero" class="hero section">
+<section id="hero" class="hero section position-relative overflow-hidden">
 
-    <img src="assets/img/hero-bg.jpg" alt="" data-aos="fade-in">
+<img src="assets/img/hero-bg.jpg" alt="" class="w-100 h-100 position-absolute top-0 start-0 object-fit-cover" style="z-index: -1;" data-aos="fade-in">
 
-    <div class="container text-center" data-aos="zoom-out" data-aos-delay="100">
-        <div class="row justify-content-center">
-            <div class="col-lg-8">
-                <h1 class="display-5 fw-bold">اكتشف المواهب وتواصل مع المبدعين</h1>
-                <p>المواهب هي كنز ثمين، ويجب اكتشافها ودعمها لتحقيق مستقبل مشرق.</p>
-            </div>
-            <div class="col-lg-6">
-                <div class="welcome-text">
-                    <p class="lead">منصة <?php echo SITE_NAME; ?> تجمع الموهوبين من مختلف المجالات لعرض إبداعاتهم والتواصل مع الجمهور وتبادل الخبرات.</p>
-                    <div class="d-grid gap-2 d-md-flex justify-content-md-start mt-4">
-
-                        <?php if (!isLoggedIn()): ?>
-                            <a href="register.php" class="btn btn-primary btn-lg px-4 me-md-2">انضم الآن</a>
-                            <a href="posts/index.php" class="btn btn-outline-secondary btn-lg px-4">استكشف المواهب</a>
-                        <?php else: ?>
-                            <a href="posts/create.php" class="btn btn-primary btn-lg px-4 me-md-2">أضف موهبتك</a>
-                            <a href="posts/index.php" class="btn btn-outline-secondary btn-lg px-4">استكشف المواهب</a>
-                        <?php endif; ?>
-                        <a href="about.php" class="btn-get-started btn btn-lg px-4 me-md-2">من نحن</a>
-
-                    </div>
-                </div>
-            </div>
-        </div>
+<div class="container text-center py-5" data-aos="zoom-out" data-aos-delay="100">
+    <div class="row justify-content-center">
+      <div class="col-lg-8">
+        <h1 class="display-5 fw-bold text-white">Talent Hub</h1>
+        <p class="text-white">
+          منصتنا تهدف إلى اكتشاف ودعم الموهوبين في مختلف المجالات من خلال توفير بيئة رقمية تُمكّنهم
+          من عرض مهاراتهم والانضمام إلى دورات تدريبية متخصصة تُنمّي قدراتهم. كما نتيح لأصحاب الأعمال والباحثين عن الكفاءات الوصول إلى مجموعة متميزة من المواهب، مما يساهم في خلق فرص عمل حقيقية وتبادل مثمر بين الموهبة وسوق العمل.
+        </p>
+      </div>
     </div>
+  </div>
 
 </section>
 
 <!-- القسم الترحيبي -->
-<div class="container mt-5">
+<div class="container mt-3">
 
 
 

@@ -56,7 +56,22 @@ class Post {
         return $this->db->resultSet();
     }
     
-    // الحصول على منشور بواسطة المعرف
+    // الحصول على المنشورات بواسطة النوع
+    public function getPostsByMediaType($postId) {
+        $this->db->query('
+            SELECT p.*, u.username, u.profile_picture, u.full_name,
+                   (SELECT COUNT(*) FROM likes WHERE post_id = p.id) as likes_count,
+                   (SELECT COUNT(*) FROM comments WHERE post_id = p.id) as comments_count
+            FROM posts p
+            JOIN users u ON p.user_id = u.id
+            WHERE media_type = :media_type
+        ');
+        
+        $this->db->bind(':media_type', $postId);
+        
+        return $this->db->resultSet();
+    }
+    
     public function getPostById($postId) {
         $this->db->query('
             SELECT p.*, u.username, u.profile_picture, u.full_name,
@@ -71,7 +86,6 @@ class Post {
         
         return $this->db->single();
     }
-    
     // تحديث منشور
     public function updatePost($data) {
         $this->db->query('UPDATE posts SET title = :title, content = :content, media_type = :media_type, media_url = :media_url WHERE id = :id AND user_id = :user_id');
@@ -112,20 +126,7 @@ class Post {
         'art'   => ['drawing', 'photography', 'calligraphy', 'design', 'sculpture', 'handcrafts'],
         'tech'  => ['programming', 'marketing', 'engineering', 'analysis', 'artificial_intelligence'],
     ];
-    public function getLimitedPosts(){
-        $sql = "SELECT posts.*, 
-                u.username,
-                u.profile_picture,
-                (SELECT COUNT(*) FROM likes WHERE post_id = posts.id) AS likes_count,
-                (SELECT COUNT(*) FROM comments WHERE post_id = posts.id) AS comments_count
-            FROM posts
-            INNER JOIN users AS u ON posts.user_id = u.id
-            ORDER BY posts.created_at DESC
-            LIMIT 3";
-            $this->db->query($sql);
-        return $this->db->resultSet();
-    }
-
+    
     public function search_posts($query, $limit = 10, $offset = 0, $user_id = null) {
         $search = '%' . $query . '%';
         
@@ -148,20 +149,8 @@ class Post {
         $params[] = $limit;
         $params[] = $offset;
         
-        // استبدال fetchAll بـ resultSet
         $posts = $this->db->resultSet($sql, $params);
         
-        // معالجة كل منشور
-        // foreach ($posts as &$post) {
-        //     // الحصول على وسائط المنشور
-        //     // $post->media = $this->db->resultSet(
-        //     //     "SELECT * FROM post_media WHERE post_id = ?",
-        //     //     [$post->id]
-        //     // );
-            
-        //     // معالجة المحتوى
-        //     $post->content = process_text($post->content);
-        // }
         
         return $posts;
     }
@@ -195,36 +184,6 @@ class Post {
         
         return $result ? $result->count : 0;
     }
-    public function getPostsByCategory($category)
-    {
-        if (!isset($this->categoriesMap[$category])) {
-            return []; // Invalid category
-        }
-
-        $subCategories = $this->categoriesMap[$category];
-        $placeholders = implode(',', array_fill(0, count($subCategories), '?'));
-
-        // Update the SQL query to properly handle likes_count and comments_count
-        $sql = "SELECT posts.*, 
-                    u.username,
-                    u.profile_picture,
-                    (SELECT COUNT(*) FROM likes WHERE post_id = posts.id) AS likes_count,
-                    (SELECT COUNT(*) FROM comments WHERE post_id = posts.id) AS comments_count
-                FROM posts
-                INNER JOIN users AS u ON posts.user_id = u.id
-                WHERE u.category IN ($placeholders)";
-
-        $this->db->query($sql);
-
-        // Bind the category values to the placeholders
-        foreach ($subCategories as $index => $categoryValue) {
-            $this->db->bind(($index + 1), $categoryValue);
-        }
-
-        $this->db->execute();
-
-        return $this->db->resultSet(); 
-    }
 
     public function getSimilarPosts($post_id, $user_id) {
         // استعلام لجلب المنشورات المشابهة
@@ -250,19 +209,37 @@ class Post {
     }
     
     // البحث عن المنشورات
-    public function searchPosts($keyword) {
-        $this->db->query('
+    public function searchPosts($keyword = null, $type = 'all') {
+        $sql = '
             SELECT p.*, u.username, u.profile_picture, 
                    (SELECT COUNT(*) FROM likes WHERE post_id = p.id) as likes_count,
                    (SELECT COUNT(*) FROM comments WHERE post_id = p.id) as comments_count
             FROM posts p
             JOIN users u ON p.user_id = u.id
-            WHERE p.title LIKE :keyword OR p.content LIKE :keyword
-            ORDER BY p.created_at DESC
-        ');
-        
-        $this->db->bind(':keyword', '%' . $keyword . '%');
-        
+            WHERE 1=1
+        ';
+    
+        // بناء شروط البحث
+        $params = [];
+    
+        if (!empty($keyword)) {
+            $sql .= ' AND (p.title LIKE :keyword OR p.content LIKE :keyword)';
+            $params[':keyword'] = '%' . $keyword . '%';
+        }
+        if (!empty($type) && $type !== 'all') {
+            $sql .= ' AND p.media_type = :type';
+            $params[':type'] = $type;
+        }
+    
+        $sql .= ' ORDER BY p.created_at DESC';
+    
+        $this->db->query($sql);
+    
+        // ربط القيم
+        foreach ($params as $key => $value) {
+            $this->db->bind($key, $value);
+        }
+    
         return $this->db->resultSet();
     }
 }

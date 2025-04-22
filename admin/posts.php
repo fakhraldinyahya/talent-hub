@@ -52,11 +52,11 @@ $page_title = 'إدارة المنشورات';
 require_once '../includes/header.php';
 ?>
 
-<div class="container-fluid mt-5">
+<div class="container mt-3">
     <div class="row">
         
         <!-- المحتوى الرئيسي -->
-        <div class="col-lg-10">
+        <div class="col-lg-12">
             <div class="d-flex justify-content-between align-items-center mb-4">
                 <h2><?php echo $page_title; ?></h2>
                 <div class="d-flex">

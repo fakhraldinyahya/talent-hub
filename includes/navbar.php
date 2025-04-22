@@ -1,30 +1,25 @@
 <nav class="navbar navbar-expand-lg navbar-light  light-background header sticky-top">
     <div class="container">
         <a class="navbar-brand" href="<?php echo URL_ROOT; ?>">
-            <i class="fas fa-star me-2"></i><?php echo SITE_NAME; ?>
+            <img src="<?php echo URL_ROOT; ?>/assets/img/logo.png" alt="<?php echo SITE_NAME; ?>" height="70">
         </a>
+
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMain" aria-controls="navbarMain" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarMain">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 <li class="nav-item">
-                    <?php if (isAdmin()): ?>
-                        <a class="nav-link <?php echo basename($_SERVER['PHP_SELF']) == 'index.php' ? 'active' : ''; ?>" href="<?php echo URL_ROOT; ?>/admin/">
-                            <i class="fas fa-home me-1"></i>الرئيسية
-                        </a>
-                        <?php else: ?>
-                            <a class="nav-link <?php echo basename($_SERVER['PHP_SELF']) == 'index.php' ? 'active' : ''; ?>" href="<?php echo URL_ROOT; ?>">
-                                <i class="fas fa-home me-1"></i>الرئيسية
-                            </a>
-                        <?php endif?>
+                    <a class="nav-link <?php echo basename($_SERVER['PHP_SELF']) == 'index.php' ? 'active' : ''; ?>" href="<?php echo URL_ROOT; ?>">
+                        <i class="fas fa-home me-1"></i>الرئيسية
+                    </a>
                 </li>
                 <?php if (isLoggedIn()): ?>
-                    <!-- <li class="nav-item">
+                    <li class="nav-item">
                         <a class="nav-link <?php echo basename($_SERVER['PHP_SELF']) == 'index.php' && dirname($_SERVER['PHP_SELF']) == '/posts' ? 'active' : ''; ?>" href="<?php echo URL_ROOT; ?>/posts/index.php">
                             <i class="fas fa-stream me-1"></i>استكشاف المواهب
                         </a>
-                    </li> -->
+                    </li>
                     <!-- <li class="nav-item">
                         <a class="nav-link <?php echo basename($_SERVER['PHP_SELF']) == 'index.php' && dirname($_SERVER['PHP_SELF']) == '/chat' ? 'active' : ''; ?>" href="<?php echo URL_ROOT; ?>/chat/index.php">
                             <i class="fas fa-comments me-1"></i>الدردشة
@@ -76,6 +71,22 @@
 
                     </ul>
                 </li>
+
+
+                <li class="nav-item">
+                    <a class="nav-link <?php echo basename($_SERVER['PHP_SELF']) == 'contact.php' ? 'active' : ''; ?>" href="<?php echo URL_ROOT; ?>/contact.php">
+                        <i class="fas fa-envelope me-1"></i> تواصل معنا
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link <?php echo basename($_SERVER['PHP_SELF']) == 'about.php' ? 'active' : ''; ?>" href="<?php echo URL_ROOT; ?>/about.php">
+                        <i class="fas fa-info-circle me-1"></i> من نحن
+                    </a>
+                </li>
+
+
+
 
             </ul>
 

@@ -3,7 +3,7 @@ require_once '../config/config.php';
 require_once '../includes/header.php';
 
 // تعيين عنوان الصفحة
-$page_title = 'قسم البرمجة';
+$page_title = 'قسم القراءة';
 ?>
 
 <div class="container py-5">
@@ -12,15 +12,15 @@ $page_title = 'قسم البرمجة';
             <!-- عنوان القسم -->
             <div class="text-center mb-4">
                 <h1 class="display-4 text-primary">
-                    <i class="fas fa-code"></i> قسم البرمجة
+                    <i class="fas fa-book-open"></i> قسم القراءة
                 </h1>
 
             </div>
 
             <!-- صورة القسم -->
             <div class="mb-5 text-center">
-                <img src="<?php echo URL_ROOT; ?>/assets/img/Programming group image.jpg"
-                    alt="قسم البرمجة"
+                <img src="<?php echo URL_ROOT; ?>/assets/img/Reading group.jpg"
+                    alt="قسم القراءة"
                     class="img-fluid rounded shadow"
                     style="max-height: 300px; object-fit: cover;">
 
@@ -33,32 +33,35 @@ $page_title = 'قسم البرمجة';
                         <i class="fas fa-info-circle text-primary me-2"></i>نبذة عن القسم
                     </h2>
                     <div class="card-text">
-                        <p>في منصتنا، نتيح للمبرمجين فرص تعلّم وتطوير من خلال دورات تجريبية تساعدهم على تنمية مهاراتهم في البرمجة وبناء مشاريع تقنية مميزة.</p>
+
+                        <p>نوفر لمحبي القراءة دورات تجريبية تساعدهم على تنمية مهارات التحليل، الفهم العميق، والنقاش البنّاء حول المحتوى المقروء.
+                        </p>
+
                     </div>
                 </div>
             </div>
 
-            <!-- الدورات التدريبية -->
+            <!-- الدورات والمواد التعليمية -->
             <div class="card shadow-sm">
                 <div class="card-body">
                     <h2 class="card-title h4 mb-3">
-                        <i class="fas fa-video text-primary me-2"></i>الدورات التدريبية
+                        <i class="fas fa-video text-primary me-2"></i>المواد التعليمية
                     </h2>
-                    <p class="card-text mb-4">اختر الدورة التي تناسبك وابدأ رحلتك في تعلم البرمجة:</p>
+                    <p class="card-text mb-4">اختر المادة التي تناسبك واغتنم فرصة التعلّم:</p>
 
                     <div class="row">
-                        <!-- دورة 1 -->
+                        <!-- مادة 1 -->
                         <div class="col-md-6 mb-4">
                             <div class="card h-100 border-0 shadow-sm">
                                 <div class="card-img-top ratio ratio-16x9">
-                                    <iframe src="https://www.youtube.com/embed/videoseries?list=PLoP3S2S1qTfBCtTYJ2dyy3mpn7aWAAjdN" title="دورة تعلم البرمجة للمبتدئين" allowfullscreen></iframe>
+                                    <iframe src="https://www.youtube.com/embed/M0daKVq6xbg" title="تعلم القراءة السريعة" allowfullscreen></iframe>
                                 </div>
                                 <div class="card-body">
-                                    <h3 class="h5 card-title">دورة البرمجة للمبتدئين</h3>
-                                    <p class="card-text text-muted small">تعلم أساسيات البرمجة من الصفر حتى الاحتراف</p>
+                                    <h3 class="h5 card-title">دورة القراءة السريعة</h3>
+                                    <p class="card-text text-muted small">تعلم كيف تقرأ بسرعة وفعالية</p>
                                 </div>
                                 <div class="card-footer bg-white">
-                                    <a href="https://youtube.com/playlist?list=PLoP3S2S1qTfBCtTYJ2dyy3mpn7aWAAjdN" target="_blank" class="btn btn-primary btn-sm w-100">
+                                    <a href="https://youtu.be/M0daKVq6xbg" target="_blank" class="btn btn-primary btn-sm w-100">
                                         <i class="fas fa-play me-1"></i> ابدأ المشاهدة
                                     </a>
                                 </div>
@@ -67,45 +70,49 @@ $page_title = 'قسم البرمجة';
                         <div class="col-md-6 mb-4">
                             <div class="card h-100 border-0 shadow-sm">
                                 <div class="card-img-top ratio ratio-16x9">
-                                <iframe width="560" height="315" src="https://www.youtube.com/embed/videoseries?si=50Ba2JuVnl5M1h91&amp;list=PLknwEmKsW8OuTqUDaFRBiAViDZ5uI3VcE" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                                <iframe width="560" height="315" src="https://www.youtube.com/embed/1POFF5RQjyM?si=XWMW5bbcMFBjOk5r" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                                </div>
+                                <div class="card-body">
+                                    <h3 class="h5 card-title">كيف تقرأ وتفهم وتنقد الكتب - علي وكتاب                                    </h3>
+                                    <p class="card-text text-muted small">كيف تقرأ وتفهم وتنقد الكتب - علي وكتاب
+                                    </p>
+                                </div>
+                                <div class="card-footer bg-white">
+                                    <a href="https://www.youtube.com/watch?si=7ihVJr7o4cUDn-Kh&v=1POFF5RQjyM&feature=youtu.be" target="_blank" class="btn btn-primary btn-sm w-100">
+                                        <i class="fas fa-play me-1"></i> ابدأ المشاهدة
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-4">
+                            <div class="card h-100 border-0 shadow-sm">
+                                <div class="card-img-top ratio ratio-16x9">
+                                <iframe width="560" height="315" src="https://www.youtube.com/embed/j5WRlRxeOMA?si=ehYxdXqJYoNse8bb" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
                                                                 </div>
                                 <div class="card-body">
-                                    <h3 class="h5 card-title">كورس جافا سكريبت كامل</h3>
-                                    <p class="card-text text-muted small">تعلم جافا سكربت  من الصفر حتى الاحتراف</p>
+                                    <h3 class="h5 card-title">افضل 5 كتب 📖 يجب ان تقرأهم الأن مفيدين جدا - ناصر العقيل -
+                                    </h3>
+                                    <p class="card-text text-muted small">افضل 5 كتب 📖 يجب ان تقرأهم الأن مفيدين جدا - ناصر العقيل -
+
+                                    </p>
                                 </div>
                                 <div class="card-footer bg-white">
-                                    <a href="https://www.youtube.com/playlist?list=PLknwEmKsW8OuTqUDaFRBiAViDZ5uI3VcE" target="_blank" class="btn btn-primary btn-sm w-100">
-                                        <i class="fas fa-play me-1"></i> ابدأ المشاهدة
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-6 mb-4">
-                            <div class="card h-100 border-0 shadow-sm">
-                                <div class="card-img-top ratio ratio-16x9">
-                                <iframe width="560" height="315" src="https://www.youtube.com/embed/videoseries?si=37528f-7AUdSYKtQ&amp;list=PLknwEmKsW8OtLRQPTLms79499meY2D6ij" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-                                </div>
-                                <div class="card-body">
-                                    <h3 class="h5 card-title">كورس html كامل بالعربي </h3>
-                                    <p class="card-text text-muted small">تعلم html   من الصفر حتى الاحتراف</p>
-                                </div>
-                                <div class="card-footer bg-white">
-                                    <a href="https://www.youtube.com/playlist?list=PLknwEmKsW8OtLRQPTLms79499meY2D6ij" target="_blank" class="btn btn-primary btn-sm w-100">
+                                    <a href="https://www.youtube.com/watch?v=j5WRlRxeOMA" target="_blank" class="btn btn-primary btn-sm w-100">
                                         <i class="fas fa-play me-1"></i> ابدأ المشاهدة
                                     </a>
                                 </div>
                             </div>
                         </div>
 
-                        <!-- دورة 2 -->
+                        <!-- مادة 2 -->
                         <div class="col-md-6 mb-4">
                             <div class="card h-100 border-0 shadow-sm">
                                 <div class="card-img-top ratio ratio-16x9 bg-light d-flex align-items-center justify-content-center">
-                                    <i class="fas fa-laptop-code fa-3x text-secondary"></i>
+                                    <i class="fas fa-book fa-3x text-secondary"></i>
                                 </div>
                                 <div class="card-body">
-                                    <h3 class="h5 card-title">دورة تطوير الويب</h3>
-                                    <p class="card-text text-muted small">تعلم HTML, CSS, JavaScript وإنشاء مواقع ويب متكاملة</p>
+                                    <h3 class="h5 card-title">ملخصات الكتب</h3>
+                                    <p class="card-text text-muted small">أهم الأفكار من أفضل الكتب العالمية</p>
                                 </div>
                                 <div class="card-footer bg-white">
                                     <button class="btn btn-outline-secondary btn-sm w-100" disabled>
@@ -115,15 +122,15 @@ $page_title = 'قسم البرمجة';
                             </div>
                         </div>
 
-                        <!-- دورة 3 -->
+                        <!-- مادة 3 -->
                         <div class="col-md-6 mb-4">
                             <div class="card h-100 border-0 shadow-sm">
                                 <div class="card-img-top ratio ratio-16x9 bg-light d-flex align-items-center justify-content-center">
-                                    <i class="fab fa-python fa-3x text-secondary"></i>
+                                    <i class="fas fa-glasses fa-3x text-secondary"></i>
                                 </div>
                                 <div class="card-body">
-                                    <h3 class="h5 card-title">دورة بايثون</h3>
-                                    <p class="card-text text-muted small">تعلم لغة بايثون من الأساسيات إلى التطبيقات المتقدمة</p>
+                                    <h3 class="h5 card-title">تحليل النصوص الأدبية</h3>
+                                    <p class="card-text text-muted small">فنون فهم وتحليل الأعمال الأدبية</p>
                                 </div>
                                 <div class="card-footer bg-white">
                                     <button class="btn btn-outline-secondary btn-sm w-100" disabled>
@@ -133,15 +140,15 @@ $page_title = 'قسم البرمجة';
                             </div>
                         </div>
 
-                        <!-- دورة 4 -->
+                        <!-- مادة 4 -->
                         <div class="col-md-6 mb-4">
                             <div class="card h-100 border-0 shadow-sm">
                                 <div class="card-img-top ratio ratio-16x9 bg-light d-flex align-items-center justify-content-center">
-                                    <i class="fas fa-mobile-alt fa-3x text-secondary"></i>
+                                    <i class="fas fa-child fa-3x text-secondary"></i>
                                 </div>
                                 <div class="card-body">
-                                    <h3 class="h5 card-title">دورة تطوير التطبيقات</h3>
-                                    <p class="card-text text-muted small">تعلم بناء تطبيقات الهاتف باستخدام Flutter</p>
+                                    <h3 class="h5 card-title">القراءة للأطفال</h3>
+                                    <p class="card-text text-muted small">كيف تختار الكتب المناسبة لأطفالك</p>
                                 </div>
                                 <div class="card-footer bg-white">
                                     <button class="btn btn-outline-secondary btn-sm w-100" disabled>
@@ -153,10 +160,11 @@ $page_title = 'قسم البرمجة';
                     </div>
                 </div>
             </div>
+
+
         </div>
     </div>
 </div>
-
 
 <?php
 require_once '../includes/footer.php';

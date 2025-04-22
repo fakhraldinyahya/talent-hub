@@ -525,7 +525,7 @@ footer {
     }
 }
 
-.hero img {
+/* .hero img {
     position: absolute;
     inset: 0;
     display: block;
@@ -533,7 +533,7 @@ footer {
     height: 100%;
     object-fit: cover;
     z-index: 1;
-}
+} */
 
 .hero .container {
     position: relative;

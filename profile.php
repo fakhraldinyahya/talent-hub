@@ -46,7 +46,7 @@ $page_title = 'الملف الشخصي: ' . $user_data->full_name;
 require_once 'includes/header.php';
 ?>
 
-<div class="container mt-5">
+<div class="container mt-3">
     <!-- معلومات الملف الشخصي -->
     <div class="row">
         <div class="col-lg-12">

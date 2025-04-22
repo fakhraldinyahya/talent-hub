@@ -17,23 +17,26 @@ $user = new User($database);
 // التحقق مما إذا كان هناك بحث
 $search_query = isset($_GET['search']) ? sanitize($_GET['search']) : '';
 $category = isset($_GET['category']) ? sanitize($_GET['category']) : '';
-
 // الحصول على المنشورات بناءً على المعايير
-if (!empty($search_query)) {
-    $posts = $post->searchPosts($search_query);
-    $page_title = 'نتائج البحث: ' . $search_query;
-} elseif (!empty($category)) {
-    $posts = $post->getPostsByCategory($category);
-    $page_title = 'المنشورات في قسم: ' . $category;
+if (!empty($search_query) || !empty($category)) {
+    $posts = $post->searchPosts($search_query, $category ?? 'all');
+    $page_title = 'نتائج البحث';
+    if (!empty($search_query)) {
+        $page_title .= ' عن: ' . $search_query;
+    }
+    if (!empty($category) && $category !== 'all') {
+        $page_title .= ' - نوع: ' . $category;
+    }
 } else {
     $posts = $post->getAllPosts();
     $page_title = 'استكشاف المواهب';
 }
 
+
 require_once '../includes/header.php';
 ?>
 
-<div class="container mt-5">
+<div class="container mt-3">
     <div class="row">
         <!-- قائمة التصفية -->
         <div class="col-md-3 mb-4">
@@ -47,7 +50,7 @@ require_once '../includes/header.php';
                             <label for="search" class="form-label">بحث</label>
                             <input type="text" name="search" id="search" class="form-control" value="<?php echo $search_query; ?>" placeholder="ابحث عن منشورات...">
                         </div>
-                        
+
                         <div class="mb-3">
                             <label class="form-label">نوع المحتوى</label>
                             <div class="form-check">
@@ -67,44 +70,16 @@ require_once '../includes/header.php';
                                 <label class="form-check-label" for="video">فيديوهات</label>
                             </div>
                         </div>
-                        
+
                         <div class="d-grid">
                             <button type="submit" class="btn btn-primary">تطبيق الفلتر</button>
                         </div>
                     </form>
                 </div>
             </div>
-            
-            <!-- أقسام المواهب -->
-            <div class="card shadow-sm mt-4">
-                <div class="card-header bg-primary text-white">
-                    <h5 class="mb-0">أقسام المواهب</h5>
-                </div>
-                <div class="card-body">
-                    <div class="list-group">
-                        <a href="<?php echo URL_ROOT; ?>/posts/index.php?category=audio" class="list-group-item list-group-item-action <?php echo $category === 'audio' ? 'active' : ''; ?>">
-                            <i class="fas fa-music me-2"></i>المواهب الصوتية
-                        </a>
-                        <a href="<?php echo URL_ROOT; ?>/posts/index.php?category=art" class="list-group-item list-group-item-action <?php echo $category === 'art' ? 'active' : ''; ?>">
-                            <i class="fas fa-palette me-2"></i>المواهب الفنية
-                        </a>
-                        <a href="<?php echo URL_ROOT; ?>/posts/index.php?category=video" class="list-group-item list-group-item-action <?php echo $category === 'video' ? 'active' : ''; ?>">
-                            <i class="fas fa-video me-2"></i>المواهب المرئية
-                        </a>
-                        <a href="<?php echo URL_ROOT; ?>/posts/index.php?category=writing" class="list-group-item list-group-item-action <?php echo $category === 'writing' ? 'active' : ''; ?>">
-                            <i class="fas fa-pen me-2"></i>مواهب الكتابة
-                        </a>
-                        <a href="<?php echo URL_ROOT; ?>/posts/index.php?category=tech" class="list-group-item list-group-item-action <?php echo $category === 'tech' ? 'active' : ''; ?>">
-                            <i class="fas fa-laptop-code me-2"></i>المواهب التقنية
-                        </a>
-                        <a href="<?php echo URL_ROOT; ?>/posts/index.php?category=other" class="list-group-item list-group-item-action <?php echo $category === 'other' ? 'active' : ''; ?>">
-                            <i class="fas fa-star me-2"></i>مواهب أخرى
-                        </a>
-                    </div>
-                </div>
-            </div>
+
         </div>
-        
+
         <!-- عرض المنشورات -->
         <div class="col-md-9">
             <div class="d-flex justify-content-between align-items-center mb-4">
@@ -113,7 +88,7 @@ require_once '../includes/header.php';
                     <i class="fas fa-plus-circle me-1"></i>إضافة منشور
                 </a>
             </div>
-            
+
             <?php if (empty($posts)): ?>
                 <div class="alert alert-info">
                     لا توجد منشورات متاحة. كن أول من يضيف منشورًا!

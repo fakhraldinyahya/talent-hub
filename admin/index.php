@@ -19,7 +19,7 @@ $page_title = 'لوحة تحكم المشرف';
 require_once '../includes/header.php';
 ?>
 
-<div class="container-fluid mt-5">
+<div class="container mt-3">
     <div class="row">
         
         

@@ -92,7 +92,7 @@ require_once '../includes/header.php';
                         </div>
                     </div>
                 </div>
-                <div class="card-body" style="height: 500px; overflow-y: auto;" id="chatMessages">
+                <div class="card-body" style="height: 450px; overflow-y: auto;" id="chatMessages">
                     <div id="messagesContainer">
                         <?php if (empty($messages)): ?>
                             <div class="text-center py-4">
@@ -135,7 +135,7 @@ require_once '../includes/header.php';
                                         <?php endif; ?>
                                         
                                         <small class="<?php echo $message->user_id === $_SESSION['user_id'] ? 'text-white-50' : 'text-muted'; ?> d-block text-end">
-                                            <?php echo date('h:i A', strtotime($message->created_at)); ?>
+                                            <?php echo formatTimeArabic($message->created_at); ?>
                                         </small>
                                     </div>
                                 </div>
@@ -637,10 +637,10 @@ function appendGroupMessage(data) {
     }
     
     // إضافة الوقت
-    const timeStr = data.time ? new Date(data.time).toLocaleTimeString('ar-SA', { hour: '2-digit', minute: '2-digit' }) : new Date().toLocaleTimeString('ar-SA', { hour: '2-digit', minute: '2-digit' });
+    // const timeStr = data.time ? new Date(data.time).toLocaleTimeString('ar-SA', { hour: '2-digit', minute: '2-digit' }) : new Date().toLocaleTimeString('ar-SA', { hour: '2-digit', minute: '2-digit' });
     
     innerContent += `<small class="${data.senderId == currentUserId ? 'text-white-50' : 'text-muted'} d-block text-end">
-        ${timeStr}
+        ${data.time}
     </small>`;
     
     innerContent += '</div>';
@@ -655,8 +655,9 @@ function appendGroupMessage(data) {
     
     // تشغيل صوت الإشعار إذا لم تكن الرسالة من المستخدم الحالي
     if (data.senderId != currentUserId) {
-        const audio = new Audio(`${URL_ROOT}/assets/sounds/notification.mp3`);
+        const audio = new Audio(`${URL_ROOT}/assets/sounds/notification.wav`);
         audio.play();
     }
 }
 </script>
+<?php require_once '../includes/footer.php'; ?>

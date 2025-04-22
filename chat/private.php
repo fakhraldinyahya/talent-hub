@@ -55,7 +55,7 @@ $page_scripts = ['chat.js'];
 require_once '../includes/header.php';
 ?>
 
-<div class="container mt-5">
+<div class="container mt-3">
     <div class="row">
         <div class="col-lg-3 mb-4">
             <div class="card shadow-sm">
@@ -99,7 +99,7 @@ require_once '../includes/header.php';
                                     </div>
                                 <?php else: ?>
                                     <?php foreach ($private_chats as $chat_item): ?>
-                                        <a href="<?php echo URL_ROOT; ?>/chat/private.php?user=<?php echo $chat_item->username; ?>" class="list-group-item list-group-item-action d-flex align-items-center <?php echo $chat_item->username === $username ? 'active' : ''; ?>">
+                                        <a href="<?php echo URL_ROOT; ?>/chat/private.php?user=<?php echo $chat_item->username; ?>" data-chat-id="<?php echo $chat_item->id; ?>" class="list-group-item chat-item list-group-item-action d-flex align-items-center <?php echo $chat_item->username === $username ? 'active' : ''; ?>">
                                             <div class="position-relative">
                                                 <img src="<?php echo URL_ROOT; ?>/assets/uploads/profile/<?php echo $chat_item->profile_picture; ?>" class="rounded-circle me-2" width="40" height="40" alt="صورة المستخدم">
                                                 <?php if ($chat_item->is_online): ?>
@@ -108,14 +108,15 @@ require_once '../includes/header.php';
                                             </div>
                                             <div class="flex-grow-1">
                                                 <h6 class="mb-0"><?php echo $chat_item->full_name; ?></h6>
-                                                <small><?php echo $chat_item->last_message ? (strlen($chat_item->last_message) > 20 ? substr($chat_item->last_message, 0, 20) . '...' : $chat_item->last_message) : 'لا توجد رسائل'; ?></small>
+                                                <small class="last-message"><?php echo $chat_item->last_message ? (strlen($chat_item->last_message) > 20 ? substr($chat_item->last_message, 0, 20) . '...' : $chat_item->last_message) : 'لا توجد رسائل'; ?></small>
                                             </div>
                                             <?php if ($chat_item->unread_count > 0 && $chat_item->username !== $username): ?>
-                                                <span class="badge bg-primary rounded-pill"><?php echo $chat_item->unread_count; ?></span>
+                                                <span class="badge bg-danger rounded-pill unread-count"><?php echo $chat_item->unread_count; ?></span>
+                                            <?php else : ?>
+                                                <span class="badge bg-danger rounded-pill unread-count"></span>
                                             <?php endif; ?>
-                                            <small class="ms-2"><?php echo $chat_item->last_message_time ? date('h:i A', strtotime($chat_item->last_message_time)) : ''; ?></small>
-                                        </a>
-                                    <?php endforeach; ?>
+                                            <small class="ms-2 message-time"><?= !empty($chat_item->last_message_time) ? formatTimeArabic($chat_item->last_message_time) : '' ?></small>
+                                            <?php endforeach; ?>
                                 <?php endif; ?>
                             </div>
                         </div>
@@ -140,7 +141,7 @@ require_once '../includes/header.php';
                                             <?php if ($group->unread_count > 0): ?>
                                                 <span class="badge bg-primary rounded-pill"><?php echo $group->unread_count; ?></span>
                                             <?php endif; ?>
-                                            <small class="text-muted ms-2"><?php echo $group->last_message_time ? date('H:i', strtotime($group->last_message_time)) : ''; ?></small>
+                                            <small class="ms-2"><?php echo formatTimeArabic(isset($chat_item->last_message_time) ? $chat_item->last_message_time : ''); ?></small>
                                         </a>
                                     <?php endforeach; ?>
                                 <?php endif; ?>
@@ -160,14 +161,19 @@ require_once '../includes/header.php';
                             <span id="userStatus" class="position-absolute bottom-0 end-0 <?php echo $chat_user->is_online ? 'bg-success' : 'bg-secondary'; ?> rounded-circle" style="width: 10px; height: 10px;"></span>
                         </div>
                         <div>
+                        <input type="hidden" id="receiverId_heide" value="<?php echo $chat_user->id; ?>">
+
                             <h5 class="mb-0"><?php echo $chat_user->full_name; ?></h5>
                             <small class="text-muted">@<?php echo $chat_user->username; ?> - <span id="statusText"><?php echo $chat_user->is_online ? 'متصل الآن' : 'غير متصل'; ?></span></small>
                         </div>
+                        <div id="typingIndicator" style="display: none;">يكتب...</div>
+
                         <div class="ms-auto">
                             <a href="<?php echo URL_ROOT; ?>/profile.php?username=<?php echo $chat_user->username; ?>" class="btn btn-outline-primary btn-sm">
                                 <i class="fas fa-user me-1"></i>عرض الملف الشخصي
                             </a>
                         </div>
+
                     </div>
                 </div>
                 <div class="card-body" style="height: 400px; overflow-y: auto;" id="chatMessages">
@@ -207,7 +213,7 @@ require_once '../includes/header.php';
                                         <?php endif; ?>
                                         
                                         <small class="<?php echo $message->sender_id === $_SESSION['user_id'] ? 'text-white-50' : 'text-muted'; ?> d-block text-end">
-                                            <?php echo date('H:i', strtotime($message->created_at)); ?>
+                                            <?php echo formatTimeArabic($message->created_at); ?>
                                             <?php if ($message->sender_id === $_SESSION['user_id']): ?>
                                                 <?php if ($message->is_read): ?>
                                                     <i class="fas fa-check-double ms-1"></i>
@@ -283,8 +289,9 @@ document.addEventListener('DOMContentLoaded', function() {
     const URL_ROOT = "<?php echo 'http://localhost/talent-hub'; ?>";
     
     // التمرير إلى سكريبت الدردشة
-    initializeChat(wsUrl, currentUserId, chatUserId);
-    
+    // initializeChat(wsUrl, currentUserId, chatUserId);
+    window.chatApp = new ChatApp(currentUserId, chatUserId, wsUrl);
+
     // تمرير معلومات إضافية
     const chatMessagesDiv = document.getElementById('chatMessages');
     chatMessagesDiv.scrollTop = chatMessagesDiv.scrollHeight;

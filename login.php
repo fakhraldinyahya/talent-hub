@@ -20,20 +20,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // الحصول على بيانات النموذج
     $email = sanitize($_POST['email']);
     $password = sanitize($_POST['password']);
-    
+
     // التحقق من الحقول المطلوبة
     if (empty($email)) {
         $errors[] = 'البريد الإلكتروني مطلوب';
     }
-    
+
     if (empty($password)) {
         $errors[] = 'كلمة المرور مطلوبة';
     }
-    
+
     // إذا لم تكن هناك أخطاء، حاول تسجيل الدخول
     if (empty($errors)) {
         $login_result = $user->login($email, $password);
-        
+
         if ($login_result) {
             // إنشاء جلسة وتوجيه المستخدم
             $_SESSION['user_id'] = $login_result->id;
@@ -71,7 +71,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             </ul>
                         </div>
                     <?php endif; ?>
-                    
+
                     <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="POST">
                         <div class="mb-3">
                             <label for="email" class="form-label">البريد الإلكتروني</label>
@@ -88,6 +88,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </div>
                 <div class="card-footer text-center">
                     <p class="mb-0">ليس لديك حساب؟ <a href="register.php">إنشاء حساب جديد</a></p>
+                </div>
+
+                <div class="text-center mt-3">
+                    <a href="forget.php" class="btn btn-link">Forgot Password?</a>
                 </div>
             </div>
         </div>

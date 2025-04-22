@@ -63,3 +63,10 @@ function sanitize($data) {
     $data = htmlspecialchars($data);
     return $data;
 }
+
+function formatTimeArabic($timeString) {
+    $date = new DateTime($timeString);
+    $time = $date->format('h:i');
+    $period = $date->format('A') == 'AM' ? 'ص' : 'م';
+    return $time . ' ' . $period; // مثل: 02:30 م
+}

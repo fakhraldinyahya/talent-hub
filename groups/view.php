@@ -214,7 +214,7 @@ require_once '../includes/header.php';
                                             <div>
                                                 <div class="d-flex align-items-center">
                                                     <a href="<?php echo URL_ROOT; ?>/profile.php?username=<?php echo $member->username; ?>" class="text-decoration-none">
-                                                        <?php echo $member->full_name; ?>
+                                                        <?php echo ($member->id === $_SESSION['user_id']) ? 'أنت' : $member->full_name;  ?>
                                                     </a>
                                                     <?php if ($member->role === 'admin'): ?>
                                                         <span class="badge bg-primary ms-1">مشرف</span>

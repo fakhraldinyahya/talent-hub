@@ -119,7 +119,7 @@ require_once '../includes/header.php';
                                                 <small class="text-muted"><?php echo $group->last_message ? (strlen($group->last_message) > 20 ? substr($group->last_message, 0, 20) . '...' : $group->last_message) : 'لا توجد رسائل'; ?></small>
                                             </div>
                                             <?php if ($group->unread_count > 0): ?>
-                                                <span class="badge bg-primary rounded-pill"><?php echo $group->unread_count; ?></span>
+                                                <span class="badge bg-danger rounded-pill"><?php echo $group->unread_count; ?></span>
                                             <?php endif; ?>
                                             <small class="text-muted ms-2"><?php echo $group->last_message_time ? date('H:i', strtotime($group->last_message_time)) : ''; ?></small>
                                         </a>
@@ -138,7 +138,7 @@ require_once '../includes/header.php';
                     <div class="text-center">
                         <i class="fas fa-comments fa-4x text-muted mb-3"></i>
                         <h4>اختر محادثة للبدء</h4>
-                        <p class="text-muted">يمكنك البدء بالدردشة مع أصدقائك أو إنشاء مجموعة جديدة.</p>
+                        <p class="text-muted">يمكنك البدء بالدردشة مع أصدقائك .</p>
                         <div class="mt-3">
                             <button class="btn btn-primary me-2" data-bs-toggle="modal" data-bs-target="#newChatModal">
                                 <i class="fas fa-user me-1"></i>دردشة جديدة

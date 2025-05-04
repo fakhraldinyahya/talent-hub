@@ -197,7 +197,6 @@ class ChatApp {
         if (!typingIndicator) return;
         
         if (data.isTyping) {
-            // typingIndicator.textContent = `${data.senderName} يكتب...`;
             typingIndicator.style.display = 'block';
         } else {
             typingIndicator.style.display = 'none';
@@ -276,7 +275,6 @@ class ChatApp {
 
     updateChatListItem(data) {
         const chatItem = document.querySelector(`.chat-item[data-chat-id="${data.chatId}"]`);
-        console.log("ddddddddddd",this.receiverId,data.chatId)
         if (chatItem) {
             // تحديث آخر رسالة
             const lastMessageEl = chatItem.querySelector('.last-message');
@@ -399,12 +397,3 @@ class ChatApp {
 
     }
 }
-
-// تهيئة التطبيق عند تحميل الصفحة
-// document.addEventListener('DOMContentLoaded', () => {
-//     // const currentUserId = document.getElementById('currentUserId').value;
-//     // const receiverId = document.getElementById('receiverId').value;
-//     // const wsUrl = `ws://${window.location.hostname}:8080`;
-    
-//     // window.chatApp = new ChatApp(currentUserId, receiverId, wsUrl);
-// });

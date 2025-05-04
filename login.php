@@ -75,11 +75,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="POST">
                         <div class="mb-3">
                             <label for="email" class="form-label">البريد الإلكتروني</label>
-                            <input type="email" name="email" id="email" class="form-control" value="<?php echo isset($_POST['email']) ? $_POST['email'] : ''; ?>" required>
+                            <input type="email" name="email" id="email" class="form-control" value="<?php echo isset($_POST['email']) ? $_POST['email'] : ''; ?>">
                         </div>
                         <div class="mb-3">
                             <label for="password" class="form-label">كلمة المرور</label>
-                            <input type="password" name="password" id="password" class="form-control" required>
+                            <input type="password" name="password" id="password" class="form-control">
                         </div>
                         <div class="d-grid">
                             <button type="submit" class="btn btn-primary">تسجيل الدخول</button>
@@ -91,8 +91,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </div>
 
                 <div class="text-center mt-3">
-                    <a href="forget.php" class="btn btn-link">Forgot Password?</a>
+                    <a href="forgot-password.php" class="btn btn-link">هل نسيت كلمة المرور؟</a>
                 </div>
+
             </div>
         </div>
     </div>

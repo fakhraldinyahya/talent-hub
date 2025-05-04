@@ -109,15 +109,16 @@ require_once '../includes/header.php';
                 </div>
             </div>
             <?php if (isLoggedIn() && !$user->isAdmin($_SESSION['user_id'])): ?>
-            <div class="card shadow-sm mt-3">
-                <div class="card-header bg-white">
-                    <h5 class="mb-0">لم تجد مجموعتك الخاصه</h5>
+                <div class="card shadow-sm mt-3">
+                    <div class="card-header bg-white">
+                        <h5 class="mb-0"> لم تجد مجموعة لموهبتك
+                            تواصل معنا</h5>
+                    </div>
+                    <div class="card-body">
+                        <a href="<?php echo URL_ROOT; ?>/contact.php" class="btn  btn-primary">تواصل معنا </a>
+                    </div>
                 </div>
-                <div class="card-body">
-                    <a href="<?php echo URL_ROOT; ?>/contact.php" class="btn  btn-primary">تواصل معنا </a>
-                </div>
-            </div>
-            <?php endif;?>
+            <?php endif; ?>
         </div>
 
         <div class="col-lg-9">

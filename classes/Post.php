@@ -123,7 +123,7 @@ class Post {
     private $categoriesMap = [
         'audio' => ['singing', 'playing_instruments', 'recitation', 'voice_imitation', 'commentary'],
         'video' => ['acting', 'dancing', 'gaming', 'editing', 'filming'],
-        'art'   => ['drawing', 'photography', 'calligraphy', 'design', 'sculpture', 'handcrafts'],
+        'art'   => ['drawing', 'photography', 'calligraphy', 'fashion', 'sculpture', 'handcrafts'],
         'tech'  => ['programming', 'marketing', 'engineering', 'analysis', 'artificial_intelligence'],
     ];
     

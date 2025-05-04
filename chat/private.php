@@ -139,7 +139,7 @@ require_once '../includes/header.php';
                                                 <small class="text-muted"><?php echo $group->last_message ? (strlen($group->last_message) > 20 ? substr($group->last_message, 0, 20) . '...' : $group->last_message) : 'لا توجد رسائل'; ?></small>
                                             </div>
                                             <?php if ($group->unread_count > 0): ?>
-                                                <span class="badge bg-primary rounded-pill"><?php echo $group->unread_count; ?></span>
+                                                <span class="badge bg-danger rounded-pill"><?php echo $group->unread_count; ?></span>
                                             <?php endif; ?>
                                             <small class="ms-2"><?php echo formatTimeArabic(isset($chat_item->last_message_time) ? $chat_item->last_message_time : ''); ?></small>
                                         </a>

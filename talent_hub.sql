@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 21, 2025 at 09:41 PM
+-- Generation Time: Apr 24, 2025 at 02:49 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.0.30
 
@@ -93,7 +93,7 @@ INSERT INTO `group_members` (`id`, `group_id`, `user_id`, `role`, `joined_at`, `
 (9, 3, 8, 'member', '2025-04-18 22:31:21', '2025-04-19 01:31:21'),
 (10, 4, 1, 'admin', '2025-04-18 22:35:16', '2025-04-19 01:35:16'),
 (13, 6, 2, 'member', '2025-04-20 20:00:48', '2025-04-20 23:01:49'),
-(14, 6, 1, 'admin', '2025-04-20 20:03:32', '2025-04-20 23:03:32'),
+(14, 6, 1, 'admin', '2025-04-20 20:03:32', '2025-04-22 00:14:44'),
 (15, 2, 1, 'member', '2025-04-20 21:05:37', '2025-04-21 00:05:46');
 
 -- --------------------------------------------------------
@@ -180,24 +180,26 @@ CREATE TABLE `users` (
   `category` varchar(50) DEFAULT NULL,
   `is_active` tinyint(1) DEFAULT 1,
   `reset_token` varchar(255) DEFAULT NULL,
-  `token_expiry` datetime DEFAULT NULL
+  `token_expiry` datetime NOT NULL,
+  `updated_at_password` datetime DEFAULT NULL COMMENT 'تاريخ آخر تحديث',
+  `last_password_change` datetime DEFAULT NULL COMMENT 'تاريخ آخر تغيير لكلمة المرور'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`id`, `username`, `email`, `password`, `full_name`, `bio`, `profile_picture`, `role`, `created_at`, `updated_at`, `is_online`, `category`, `is_active`, `reset_token`, `token_expiry`) VALUES
-(1, 'Mashael', 'mashaelalmari@gmail.com', '$2y$10$kpY9nIxT5G4l3lqnMX8AHeK5Uqn2b3NXKuIOMffBqmH7v9Q/CV9S6', 'Mashael aljohani\n', '', 'default.jpeg', 'admin', '2025-04-15 00:59:36', '2025-04-21 17:21:06', 1, 'programming', 1, NULL, '2025-04-21 04:47:02'),
-(2, 'Waad', 'Waad@gmail.com', '$2y$10$kpY9nIxT5G4l3lqnMX8AHeK5Uqn2b3NXKuIOMffBqmH7v9Q/CV9S6', 'Waad aljohan', NULL, 'default.jpeg', 'user', '2025-04-15 01:16:08', '2025-04-21 19:35:45', 1, 'programming', 1, NULL, '2025-04-21 22:04:33'),
-(3, 'Maha', 'Maha@gmail.com', '$2y$10$kpY9nIxT5G4l3lqnMX8AHeK5Uqn2b3NXKuIOMffBqmH7v9Q/CV9S6', 'Maha aljohani\n', NULL, 'default.jpeg', 'user', '2025-04-18 14:50:28', '2025-04-20 21:46:18', 0, NULL, 1, NULL, NULL),
-(4, 'Rami', 'Rami@gmail.com', '$2y$10$kpY9nIxT5G4l3lqnMX8AHeK5Uqn2b3NXKuIOMffBqmH7v9Q/CV9S6', 'Rami alharbi\n', NULL, 'default.jpeg', 'user', '2025-04-18 15:25:03', '2025-04-21 19:36:28', 0, NULL, 1, NULL, NULL),
-(5, 'Osama', 'Osama@gmail.com', '$2y$10$kpY9nIxT5G4l3lqnMX8AHeK5Uqn2b3NXKuIOMffBqmH7v9Q/CV9S6', 'Osama alblwi\n', NULL, 'default.jpeg', 'user', '2025-04-18 15:27:38', '2025-04-21 19:36:23', 1, 'writing', 1, NULL, NULL),
-(6, 'Abdullah', 'Abdullah@gmail.com', '$2y$10$kpY9nIxT5G4l3lqnMX8AHeK5Uqn2b3NXKuIOMffBqmH7v9Q/CV9S6', 'Abdullah alshammri', NULL, 'default.jpeg', 'user', '2025-04-18 19:47:26', '2025-04-21 19:36:20', 0, 'programming', 1, NULL, NULL),
-(7, 'Hala', 'Hala@gmail.com', '$2y$10$kpY9nIxT5G4l3lqnMX8AHeK5Uqn2b3NXKuIOMffBqmH7v9Q/CV9S6', 'Hala alharbi', NULL, 'default.jpeg', 'user', '2025-04-18 19:53:07', '2025-04-21 19:36:17', 0, 'engineering', 1, NULL, NULL),
-(8, 'Raghad', 'Raghad@gmail.com', '$2y$10$kpY9nIxT5G4l3lqnMX8AHeK5Uqn2b3NXKuIOMffBqmH7v9Q/CV9S6', 'Raghad ahmed', NULL, 'default.jpeg', 'user', '2025-04-18 21:33:46', '2025-04-21 19:36:10', 1, 'artificial_intelligence', 1, NULL, NULL),
-(9, 'Dania', 'Dania@gmail.com', '$2y$10$kpY9nIxT5G4l3lqnMX8AHeK5Uqn2b3NXKuIOMffBqmH7v9Q/CV9S6', 'Dania khalid \n', NULL, 'default.jpeg', 'user', '2025-04-18 22:21:53', '2025-04-21 19:36:07', 1, 'design', 1, NULL, NULL),
-(10, 'Rana', 'Rana@gmail.com', '$2y$10$kpY9nIxT5G4l3lqnMX8AHeK5Uqn2b3NXKuIOMffBqmH7v9Q/CV9S6', 'Rana aljohn', NULL, 'default.jpeg', 'user', '2025-04-19 23:14:33', '2025-04-19 23:14:33', 0, 'drawing', 1, NULL, NULL);
+INSERT INTO `users` (`id`, `username`, `email`, `password`, `full_name`, `bio`, `profile_picture`, `role`, `created_at`, `updated_at`, `is_online`, `category`, `is_active`, `reset_token`, `token_expiry`, `updated_at_password`, `last_password_change`) VALUES
+(1, 'Mashael', 'mashaelalmari@gmail.com', '$2y$10$SIYxHVWBev7262m8pSJe6ue5RjHvDNmFW5NdMtsBxCUycCY1a2Xwu', 'Mashael aljohani\n', '', 'default.jpeg', 'admin', '2025-04-15 00:59:36', '2025-04-24 00:06:44', 1, 'programming', 1, NULL, '0000-00-00 00:00:00', NULL, NULL),
+(2, 'Waad', 'hameedmansor39@gmail.com', '$2y$10$SIYxHVWBev7262m8pSJe6ue5RjHvDNmFW5NdMtsBxCUycCY1a2Xwu', 'Waad aljohan', NULL, 'default.jpeg', 'user', '2025-04-15 01:16:08', '2025-04-24 00:49:04', 1, 'programming', 1, NULL, '0000-00-00 00:00:00', NULL, NULL),
+(3, 'Maha', 'Maha@gmail.com', '$2y$10$SIYxHVWBev7262m8pSJe6ue5RjHvDNmFW5NdMtsBxCUycCY1a2Xwu', 'Maha aljohani\n', NULL, 'default.jpeg', 'user', '2025-04-18 14:50:28', '2025-04-24 00:06:51', 0, NULL, 1, NULL, '0000-00-00 00:00:00', NULL, NULL),
+(4, 'Rami', 'Rami@gmail.com', '$2y$10$SIYxHVWBev7262m8pSJe6ue5RjHvDNmFW5NdMtsBxCUycCY1a2Xwu', 'Rami alharbi\n', NULL, 'default.jpeg', 'user', '2025-04-18 15:25:03', '2025-04-24 00:06:58', 0, NULL, 1, NULL, '0000-00-00 00:00:00', NULL, NULL),
+(5, 'Osama', 'Osama@gmail.com', '$2y$10$SIYxHVWBev7262m8pSJe6ue5RjHvDNmFW5NdMtsBxCUycCY1a2Xwu', 'Osama alblwi\n', NULL, 'default.jpeg', 'user', '2025-04-18 15:27:38', '2025-04-24 00:07:03', 1, 'writing', 1, NULL, '0000-00-00 00:00:00', NULL, NULL),
+(6, 'Abdullah', 'Abdullah@gmail.com', '$2y$10$SIYxHVWBev7262m8pSJe6ue5RjHvDNmFW5NdMtsBxCUycCY1a2Xwu', 'Abdullah alshammri', NULL, 'default.jpeg', 'user', '2025-04-18 19:47:26', '2025-04-24 00:07:07', 0, 'programming', 1, NULL, '0000-00-00 00:00:00', NULL, NULL),
+(7, 'Hala', 'Hala@gmail.com', '$2y$10$SIYxHVWBev7262m8pSJe6ue5RjHvDNmFW5NdMtsBxCUycCY1a2Xwu', 'Hala alharbi', NULL, 'default.jpeg', 'user', '2025-04-18 19:53:07', '2025-04-24 00:07:11', 0, 'engineering', 1, NULL, '0000-00-00 00:00:00', NULL, NULL),
+(8, 'Raghad', 'Raghad@gmail.com', '$2y$10$SIYxHVWBev7262m8pSJe6ue5RjHvDNmFW5NdMtsBxCUycCY1a2Xwu', 'Raghad ahmed', NULL, 'default.jpeg', 'user', '2025-04-18 21:33:46', '2025-04-24 00:07:15', 1, 'artificial_intelligence', 1, NULL, '0000-00-00 00:00:00', NULL, NULL),
+(9, 'Dania', 'Dania@gmail.com', '$2y$10$SIYxHVWBev7262m8pSJe6ue5RjHvDNmFW5NdMtsBxCUycCY1a2Xwu', 'Dania khalid \n', NULL, 'default.jpeg', 'user', '2025-04-18 22:21:53', '2025-04-24 00:07:19', 1, 'design', 1, NULL, '0000-00-00 00:00:00', NULL, NULL),
+(10, 'Rana', 'Rana@gmail.com', '$2y$10$kpY9nIxT5G4l3lqnMX8AHeK5Uqn2b3NXKuIOMffBqmH7v9Q/$2y$10$SIYxHVWBev7262m8pSJe6ue5RjHvDNmFW5NdMtsBxCUycCY1a2Xwu', 'Rana aljohn', NULL, 'default.jpeg', 'user', '2025-04-19 23:14:33', '2025-04-24 00:07:23', 0, 'drawing', 1, NULL, '0000-00-00 00:00:00', NULL, NULL);
 
 --
 -- Indexes for dumped tables

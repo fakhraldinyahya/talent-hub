@@ -19,6 +19,8 @@ require 'PHPMailer/Exception.php';
 require 'PHPMailer/PHPMailer.php';
 require 'PHPMailer/SMTP.php';
 
+error_log("Current server time: " . date('Y-m-d H:i:s'));
+
 // معالجة طلب استعادة كلمة المرور
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email = sanitize($_POST["email"]);
@@ -33,7 +35,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // إذا لم تكن هناك أخطاء
     if (empty($errors)) {
         // استخدام الدالة الجديدة بدلاً من القديمة
-        $userData = $user->findUserByEmail($email);
+        $userData = $user->findUserByEmailForReset($email);
 
         if ($userData) {
             $token = $user->createPasswordResetToken($email);
@@ -41,8 +43,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             if ($token) {
                 // إعداد رابط إعادة تعيين كلمة المرور
 
-                // في ملف forgot-password.php
+
+
                 $resetURL = URL_ROOT . "/reset-password.php?token=" . urlencode($token);
+
 
                 // إعداد البريد الإلكتروني
                 $mail = new PHPMailer(true);
@@ -53,7 +57,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     $mail->Host = 'smtp.gmail.com';
                     $mail->SMTPAuth = true;
                     $mail->Username = 'hameedmansor39@gmail.com';
-                    $mail->Password = 'mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm';
+                    $mail->Password = 'mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm';
                     $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
                     $mail->Port = 465;
 
@@ -65,36 +69,29 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     $mail->isHTML(true);
                     $mail->Subject = 'Recover your password- Talent Hub';
                     $mail->Body = "
-                        <html dir='rtl'>
-                        <head>
-                            <title>استعادة كلمة المرور</title>
-                            <style>
-                                body { font-family: Arial, sans-serif; line-height: 1.6; }
-                                .container { max-width: 600px; margin: 0 auto; padding: 20px; }
-                                .button {
-                                    display: inline-block;
-                                    background-color: #cb8670;
-                                    color: white;
-                                    padding: 10px 20px;
-                                    text-decoration: none;
-                                    border-radius: 5px;
-                                }
-                            </style>
-                        </head>
-                        <body>
-                            <div class='container'>
-                                <h2>استعادة كلمة المرور</h2>
-                                <p>مرحباً </p>
-                                <p>لقد تلقينا طلباً لإعادة تعيين كلمة المرور الخاصة بحسابك.</p>
-                                <p>الرجاء النقر على الزر أدناه لإعادة تعيين كلمة المرور:</p>
-                                <p><a href='{$resetURL}' class='button'>إعادة تعيين كلمة المرور</a></p>
-                                <p>إذا لم تطلب إعادة تعيين كلمة المرور، يمكنك تجاهل هذا البريد الإلكتروني.</p>
-                                <p>ينتهي صلاحية هذا الرابط خلال ساعة واحدة.</p>
-                                <p>شكراً لك،<br>فريق Talent Hub </p>
-                            </div>
-                        </body>
-                        </html>
-                    ";
+                            <html dir='rtl'>
+                            <head>
+                                <title>استعادة كلمة المرور</title>
+                                <style>
+                                    body { font-family: Arial, sans-serif; line-height: 1.6; }
+                                    .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+                                </style>
+                            </head>
+                            <body>
+                                <div class='container'>
+                                    <h2>استعادة كلمة المرور</h2>
+                                    <p>مرحباً </p>
+                                    <p>لقد تلقينا طلباً لإعادة تعيين كلمة المرور الخاصة بحسابك.</p>
+                                    <p>لإعادة تعيين كلمة المرور، يرجى زيارة الرابط التالي:</p>
+                                    <p><a href='{$resetURL}'>{$resetURL}</a></p>
+                                    <p>إذا لم تطلب إعادة تعيين كلمة المرور، يمكنك تجاهل هذا البريد الإلكتروني.</p>
+                                    <p>ينتهي صلاحية هذا الرابط خلال ساعة واحدة.</p>
+                                    <p>شكراً لك،<br>فريق Talent Hub </p>
+                                </div>
+                            </body>
+                            </html>
+                        ";
+
 
                     $mail->send();
                     $_SESSION['success'] = "تم إرسال رابط استعادة كلمة المرور إلى بريدك الإلكتروني.";

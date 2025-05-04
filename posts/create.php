@@ -49,7 +49,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
             if (!in_array($_FILES['media']['type'], $allowed_types)) {
                 $errors[] = 'نوع الملف غير مدعوم';
-            } elseif ($_FILES['media']['size'] > $max_size) {
+            } if ($_FILES['media']['size'] > $max_size) {
                 $errors[] = 'حجم الملف يتجاوز 10 ميجابايت';
             } else {
                 $filename = uniqid() . '_' . $_FILES['media']['name'];

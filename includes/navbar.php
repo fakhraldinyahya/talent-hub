@@ -20,11 +20,11 @@
                             <i class="fas fa-stream me-1"></i>استكشاف المواهب
                         </a>
                     </li>
-                    <!-- <li class="nav-item">
+                    <li class="nav-item">
                         <a class="nav-link <?php echo basename($_SERVER['PHP_SELF']) == 'index.php' && dirname($_SERVER['PHP_SELF']) == '/chat' ? 'active' : ''; ?>" href="<?php echo URL_ROOT; ?>/chat/index.php">
                             <i class="fas fa-comments me-1"></i>الدردشة
                         </a>
-                    </li> -->
+                    </li>
                     <li class="nav-item">
                         <a class="nav-link <?php echo basename($_SERVER['PHP_SELF']) == 'index.php' && dirname($_SERVER['PHP_SELF']) == '/groups' ? 'active' : ''; ?>" href="<?php echo URL_ROOT; ?>/groups/index.php">
                             <i class="fas fa-users me-1"></i>المجموعات
@@ -68,6 +68,16 @@
                                 <i class="fas fa-tshirt me-2"></i>قسم تصميم الأزياء
                             </a>
                         </li>
+
+                        <li>
+                            <a class="dropdown-item" href="<?php echo URL_ROOT; ?>/categories/other.php">
+                                <i class="fas fa-box me-2"></i> اخرى
+                            </a>
+                        </li>
+
+
+
+
 
                     </ul>
                 </li>

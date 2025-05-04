@@ -277,6 +277,8 @@ class User
             $token = bin2hex(random_bytes(32));
             $expiry = date('Y-m-d H:i:s', strtotime('+1 hour'));
 
+
+
             error_log("Creating token for email: " . $email);
             error_log("Token will expire at: " . $expiry);
 
@@ -303,35 +305,23 @@ class User
         }
     }
 
+
+    public function findUserByEmailForReset($email)
+    {
+        $this->db->query('SELECT id, username, email FROM users WHERE email = :email');
+        $this->db->bind(':email', $email);
+        return $this->db->single(); // ستعيد كائن المستخدم أو false إذا لم يوجد
+    }
+
     public function verifyPasswordResetToken($token)
     {
-        try {
-            error_log("Verifying token in DB: " . $token);
-
-            $query = "SELECT id, email FROM users 
-                     WHERE reset_token = :token 
-                     AND token_expiry >= NOW() 
-                     LIMIT 1";
-
-            $this->db->query($query);
-            $this->db->bind(':token', $token);
-
-            $result = $this->db->single();
-
-            if (!$result) {
-                error_log("Token not found or expired: " . $token);
-                // تسجيل محتويات قاعدة البيانات للمساعدة في التشخيص
-                $this->db->query("SELECT email, reset_token, token_expiry FROM users WHERE reset_token IS NOT NULL");
-                $tokens = $this->db->resultSet();
-                error_log("Current tokens in DB: " . print_r($tokens, true));
-            }
-
-            return $result;
-        } catch (PDOException $e) {
-            error_log("Database error in verifyPasswordResetToken: " . $e->getMessage());
-            return false;
-        }
+        $sql = "SELECT * FROM users WHERE reset_token = :token AND token_expiry > NOW()";
+        $this->db->query($sql);
+        $this->db->bind(':token', $token);
+        return $this->db->single(); // يرجع المستخدم ككائن إذا وُجد أو false
     }
+
+
     public function updatePassword($user_id, $hashed_password)
     {
         try {

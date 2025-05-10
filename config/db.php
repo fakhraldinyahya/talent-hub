@@ -1,23 +1,6 @@
 <?php
 require_once 'config.php';
-function process_text($text) {
-    // تعقيم النص أولاً
-    $text = sanitize($text);
-    
-    // تحويل الروابط إلى روابط قابلة للنقر
-    $text = preg_replace('/(https?:\/\/[^\s]+)/', '<a href="$1" target="_blank">$1</a>', $text);
-    
-    // تحويل المعرفات مثل @username إلى روابط
-    $text = preg_replace('/@([a-zA-Z0-9_]+)/', '<a href="' . SITE_URL . '/profile.php?username=$1">@$1</a>', $text);
-    
-    // تحويل الهاشتاجات مثل #tag إلى روابط
-    $text = preg_replace('/#([a-zA-Z0-9_]+)/', '<a href="' . SITE_URL . '/search.php?q=%23$1">#$1</a>', $text);
-    
-    // تحويل سطور النص إلى <br>
-    $text = nl2br($text);
-    
-    return $text;
-}
+
 function generate_url($path = '', $query = []) {
     $url = SITE_URL . '/' . $path;
     if (!empty($query)) {
@@ -103,20 +86,5 @@ class Database {
     // الحصول على آخر معرف تم إدراجه
     public function lastInsertId() {
         return $this->conn->lastInsertId();
-    }
-    
-    // بدء المعاملة
-    public function beginTransaction() {
-        return $this->conn->beginTransaction();
-    }
-    
-    // التراجع عن المعاملة
-    public function rollBack() {
-        return $this->conn->rollBack();
-    }
-    
-    // تأكيد المعاملة
-    public function commit() {
-        return $this->conn->commit();
     }
 }

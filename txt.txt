@@ -1,3 +1,0 @@
-php websocket\server.php
-
-composer require cboden/ratchet

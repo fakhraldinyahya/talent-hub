@@ -7,6 +7,27 @@ class Chat
     {
         $this->db = $database;
     }
+    public function createMessage($senderId, $receiverId, $message, $mediaType = 'text', $mediaUrl = null)
+    {
+        $this->db->query('
+            INSERT INTO private_messages 
+            (sender_id, receiver_id, message, media_type, media_url) 
+            VALUES (:sender_id, :receiver_id, :message, :media_type, :media_url)
+        ');
+
+        $this->db->bind(':sender_id', $senderId);
+        $this->db->bind(':receiver_id', $receiverId);
+        $this->db->bind(':message', $message);
+        $this->db->bind(':media_type', $mediaType);
+        $this->db->bind(':media_url', $mediaUrl);
+
+        if ($this->db->execute()) {
+            return $this->db->lastInsertId();
+        }
+
+        return false;
+    }
+
 
     // الحصول على قائمة الدردشات الخاصة للمستخدم
     public function getPrivateChats($userId)

@@ -1,216 +1,210 @@
-let websocket;
-let connectedUserId;
-let chatWithUserId;
-let mediaFile = null;
-let mediaType = 'text';
+class ChatApp {
+    constructor(userId, receiverId, wsUrl) {
+        this.userId = userId;
+        this.receiverId = receiverId;
+        this.wsUrl = wsUrl;
+        this.websocket = null;
+        this.typingTimeout = null;
+        this.isTyping = false;
+        this.URL_ROOT = window.URL_ROOT || '';
 
-function initializeChat(wsUrl, userId, receiverId) {
-    connectedUserId = userId;
-    chatWithUserId = receiverId;
-    
-    // إنشاء اتصال WebSocket
-    websocket = new WebSocket(wsUrl);
-    
-    websocket.onopen = function(event) {
-        console.log("WebSocket connection established");
-        
-        // تسجيل المستخدم في الخادم
-        websocket.send(JSON.stringify({
-            type: 'register',
-            userId: connectedUserId
-        }));
-    };
-    
-    websocket.onmessage = function(event) {
-        const data = JSON.parse(event.data);
-        console.log("Received messagedatadatadata:", data);
-        switch (data.type) {
-            case 'status':
-                console.log("Connection status:", data.status);
-                break;
-                
-            case 'onlineUsers':
-                updateOnlineStatus(data.users);
-                break;
-            case 'unreadUpdate':
-                updateCountLastmessage(data);
-                break;
-                
-            case 'private':
-                if (data.senderId == chatWithUserId) {
-                    appendMessage(data, false);
-                } else {
-                    // إشعار بوصول رسالة من مستخدم آخر
-                    console.log("sddddddddddddddddddddd")
-                    showNotification(data);
-                }
-                break;
-                
-            case 'confirm':
-                // تأكيد إرسال الرسالة
-                console.log("Message sent successfully:", data.messageId);
-                break;
-        }
-    };
-    
-    websocket.onclose = function(event) {
-        console.log("WebSocket connection closed");
-        // محاولة إعادة الاتصال بعد 5 ثوانٍ
-        setTimeout(function() {
-            initializeChat(wsUrl, connectedUserId, chatWithUserId);
-        }, 5000);
-    };
-    
-    websocket.onerror = function(error) {
-        console.error("WebSocket error:", error);
-    };
-    
-    // تهيئة النموذج
-    const messageForm = document.getElementById('messageForm');
-    if (messageForm) {
-        messageForm.addEventListener('submit', sendMessage);
+        this.initializeWebSocket();
+        this.setupEventListeners();
     }
-    
-    // تهيئة أزرار المرفقات
-    const imageAttachment = document.getElementById('imageAttachment');
-    const videoAttachment = document.getElementById('videoAttachment');
-    const audioAttachment = document.getElementById('audioAttachment');
-    const fileInput = document.getElementById('fileInput');
-    const removeAttachment = document.getElementById('removeAttachment');
-    
-    if (imageAttachment) {
-        imageAttachment.addEventListener('click', function(e) {
-            e.preventDefault();
-            mediaType = 'image';
-            fileInput.accept = 'image/*';
-            fileInput.click();
-        });
-    }
-    
-    if (videoAttachment) {
-        videoAttachment.addEventListener('click', function(e) {
-            e.preventDefault();
-            mediaType = 'video';
-            fileInput.accept = 'video/*';
-            fileInput.click();
-        });
-    }
-    
-    if (audioAttachment) {
-        audioAttachment.addEventListener('click', function(e) {
-            e.preventDefault();
-            mediaType = 'audio';
-            fileInput.accept = 'audio/*';
-            fileInput.click();
-        });
-    }
-    
-    if (fileInput) {
-        fileInput.addEventListener('change', handleFileSelect);
-    }
-    
-    if (removeAttachment) {
-        removeAttachment.addEventListener('click', function() {
-            clearAttachment();
-        });
-    }
-}
 
-// إرسال رسالة
-function sendMessage(e) {
-    e.preventDefault();
-    
-    const messageInput = document.getElementById('messageInput');
-    const receiverId = document.getElementById('receiverId').value;
-    const message = messageInput.value.trim();
-    
-    if (message === '' && !mediaFile) {
-        return;
-    }
-    
-    // إذا كان هناك ملف مرفق
-    if (mediaFile) {
-        // تحميل الملف إلى الخادم أولاً
-        const formData = new FormData();
-        formData.append('file', mediaFile);
-        formData.append('type', mediaType);
-        formData.append('sender_id', connectedUserId);
-        formData.append('receiver_id', receiverId);
+    initializeWebSocket() {
+        this.websocket = new WebSocket(this.wsUrl);
         
-        fetch(`${URL_ROOT}/upload_chat_media.php`, {
-            method: 'POST',
-            body: formData
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                // إرسال الرسالة مع معلومات الوسائط عبر WebSocket
-                const messageObj = {
-                    type: 'private',
-                    receiver: receiverId,
-                    message: message,
-                    mediaType: mediaType,
-                    mediaUrl: data.filename
-                };
-                
-                websocket.send(JSON.stringify(messageObj));
-                
-                // إضافة الرسالة إلى المحادثة محليًا
-                const localMessage = {
-                    messageId: Date.now(),
-                    senderId: connectedUserId,
-                    message: message,
-                    mediaType: mediaType,
-                    mediaUrl: data.filename,
-                    time: new Date().toISOString()
-                };
-                
-                appendMessage(localMessage, true);
-                
-                // مسح حقل الإدخال والمرفق
-                messageInput.value = '';
-                clearAttachment();
-            } else {
-                alert('حدث خطأ أثناء تحميل الملف: ' + data.message);
+        this.websocket.onopen = () => {
+            console.log("اتصال WebSocket مفتوح");
+            this.registerUser();
+        };
+        
+        this.websocket.onmessage = (event) => {
+            const data = JSON.parse(event.data);
+            console.log("تم استقبال البيانات:", data);
+            
+            switch(data.type) {
+                case 'status':
+                    this.handleStatusUpdate(data);
+                    break;
+                    
+                case 'private':
+                    this.handleIncomingMessage(data);
+                    break;
+                    
+                case 'typing':
+                    this.handleTypingIndicator(data);
+                    break;
+                    
+                case 'online_users':
+                    this.updateOnlineStatus(data.users);
+                    break;
+                    
+                case 'conversation_update':
+                    this.updateChatListItem(data);
+                    break;
+                    
+                case 'confirm':
+                    this.handleMessageConfirmation(data);
+                    break;
             }
-        })
-        .catch(error => {
-            console.error('Error uploading file:', error);
-            alert('حدث خطأ أثناء تحميل الملف');
-        });
-    } else {
-        // إرسال رسالة نصية فقط
-        const messageObj = {
-            type: 'private',
-            receiver: receiverId,
-            message: message
         };
         
-        websocket.send(JSON.stringify(messageObj));
-        
-        // إضافة الرسالة إلى المحادثة محليًا
-        const localMessage = {
-            messageId: Date.now(),
-            senderId: connectedUserId,
-            message: message,
-            mediaType: 'text',
-            time: new Date().toISOString()
+        this.websocket.onclose = () => {
+            console.log("اتصال WebSocket مغلق - إعادة المحاولة...");
+            setTimeout(() => this.initializeWebSocket(), 5000);
         };
         
-        appendMessage(localMessage, true);
-        
-        // مسح حقل الإدخال
-        messageInput.value = '';
+        this.websocket.onerror = (error) => {
+            console.error("خطأ في WebSocket:", error);
+        };
     }
-    
-    // التمرير إلى أسفل المحادثة
-    const chatMessages = document.getElementById('chatMessages');
-    chatMessages.scrollTop = chatMessages.scrollHeight;
-}
 
-// إضافة رسالة إلى المحادثة
-function appendMessage(data, isOwn) {
-    const messagesContainer = document.getElementById('messagesContainer');
+    registerUser() {
+        this.websocket.send(JSON.stringify({
+            type: 'register',
+            userId: this.userId
+        }));
+    }
+
+    setupEventListeners() {
+        // إرسال الرسالة
+        const messageForm = document.getElementById('messageForm');
+        if (messageForm) {
+            messageForm.addEventListener('submit', (e) => this.sendMessage(e));
+        }
+        
+        // حقل إدخال الرسالة
+        const messageInput = document.getElementById('messageInput');
+        if (messageInput) {
+            // مؤشر الكتابة
+            messageInput.addEventListener('input', () => {
+                this.sendTypingStatus(true);
+                
+                // إلغاء المؤشر السابق وإعادة تعيينه
+                clearTimeout(this.typingTimeout);
+                this.typingTimeout = setTimeout(() => {
+                    this.sendTypingStatus(false);
+                }, 2000);
+            });
+        }
+        
+        // مرفقات الصور/الملفات
+        const fileInput = document.getElementById('fileInput');
+        if (fileInput) {
+            fileInput.addEventListener('change', (e) => this.handleFileSelect(e));
+        }
+    }
+
+    sendMessage(e) {
+        e.preventDefault();
+        
+        const messageInput = document.getElementById('messageInput');
+        const message = messageInput.value.trim();
+        
+        if (message === '' && !this.mediaFile) return;
+        
+        // إرسال حالة التوقف عن الكتابة
+        this.sendTypingStatus(false);
+        clearTimeout(this.typingTimeout);
+        
+        if (this.mediaFile) {
+            this.sendMediaMessage(message);
+        } else {
+            this.sendTextMessage(message);
+        }
+    }
+
+    async sendMediaMessage(message) {
+        const formData = new FormData();
+        formData.append('file', this.mediaFile);
+        formData.append('type', this.mediaType);
+        formData.append('sender_id', this.userId);
+        formData.append('receiver_id', this.receiverId);
+        
+        try {
+            const response = await fetch(`${this.URL_ROOT}/upload_chat_media.php`, {
+                method: 'POST',
+                body: formData
+            });
+            
+            const data = await response.json();
+            
+            if (data.success) {
+                this.websocket.send(JSON.stringify({
+                    type: 'private',
+                    receiver: this.receiverId,
+                    message: message,
+                    mediaType: this.mediaType,
+                    mediaUrl: data.filename
+                }));
+                
+                this.appendLocalMessage(message, data.filename);
+                this.clearMessageInput();
+            } else {
+                alert('خطأ في رفع الملف: ' + data.message);
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            alert('حدث خطأ أثناء إرسال الملف');
+        }
+    }
+
+    sendTextMessage(message) {
+        this.websocket.send(JSON.stringify({
+            type: 'private',
+            receiver: this.receiverId,
+            message: message
+        }));
+        
+        this.appendLocalMessage(message);
+        this.clearMessageInput();
+    }
+
+    sendTypingStatus(isTyping) {
+        if (this.isTyping !== isTyping) {
+            this.isTyping = isTyping;
+            this.websocket.send(JSON.stringify({
+                type: 'typing',
+                receiver: this.receiverId,
+                isTyping: isTyping
+            }));
+        }
+    }
+
+    handleIncomingMessage(data) {
+        if (data.senderId === this.receiverId) {
+            // رسالة في الدردشة الحالية
+            this.appendMessage(data, false);
+            this.scrollToBottom();
+            
+            // إرسال تأكيد القراءة
+            this.websocket.send(JSON.stringify({
+                type: 'read_receipt',
+                messageId: data.messageId
+            }));
+        } else {
+            // رسالة من محادثة أخرى
+            this.showNotification(data);
+            this.updateChatListItem(data);
+        }
+    }
+
+    handleTypingIndicator(data) {
+        console.log(data,"datadatadatadatadatadatadatadatadata")
+        const typingIndicator = document.getElementById('typingIndicator');
+        if (!typingIndicator) return;
+        
+        if (data.isTyping) {
+            typingIndicator.style.display = 'block';
+        } else {
+            typingIndicator.style.display = 'none';
+        }
+    }
+
+    appendMessage(data, isOwn) {
+        const messagesContainer = document.getElementById('messagesContainer');
     
     // إنشاء عنصر div للرسالة
     const messageDiv = document.createElement('div');
@@ -247,11 +241,9 @@ function appendMessage(data, isOwn) {
         innerContent += `<p class="mb-0">${data.message.replace(/\n/g, '<br>')}</p>`;
     }
     
-    // إضافة الوقت وعلامات القراءة
-    const timeStr = data.time ? new Date(data.time).toLocaleTimeString('ar-SA', { hour: '2-digit', minute: '2-digit' }) : new Date().toLocaleTimeString('ar-SA', { hour: '2-digit', minute: '2-digit' });
     
     innerContent += `<small class="${isOwn ? 'text-white-50' : 'text-muted'} d-block text-end">
-        ${timeStr}
+        ${data.time}
         ${isOwn ? '<i class="fas fa-check ms-1"></i>' : ''}
     </small>`;
     
@@ -264,177 +256,144 @@ function appendMessage(data, isOwn) {
     // التمرير إلى أسفل المحادثة
     const chatMessages = document.getElementById('chatMessages');
     chatMessages.scrollTop = chatMessages.scrollHeight;
-}
 
-// تحديث حالة الاتصال للمستخدمين
-function updateOnlineStatus(users) {
-    const userStatus = document.getElementById('userStatus');
-    const statusText = document.getElementById('statusText');
-    
-    // البحث عن المستخدم الذي نتحدث معه
-    if(userStatus){
-        const chatUser = users.find(user => user.id == chatWithUserId);
-        if (chatUser) {
-            // تحديث الحالة إلى متصل
-            userStatus.className = 'position-absolute bottom-0 end-0 bg-success rounded-circle';
-            userStatus.style.width = '10px';
-            userStatus.style.height = '10px';
-            
-            if (statusText) {
-                statusText.textContent = 'متصل الآن';
-            }
-        } else {
-            // تحديث الحالة إلى غير متصل
-            userStatus.className = 'position-absolute bottom-0 end-0 bg-secondary rounded-circle';
-            userStatus.style.width = '10px';
-            userStatus.style.height = '10px';
-            
-            if (statusText) {
-                statusText.textContent = 'غير متصل';
-            }
-        }
     }
-}
-function updateCountLastmessage(data) {
-    const chatItem = document.querySelector(`.list-group-item[data-chat-id="${data.chatId}"]`);
-    if (chatItem) {
-        const lastMessageElement = chatItem.querySelector('.last-message');
-        if (lastMessageElement) {
-            lastMessageElement.textContent = data.lastMessage;
-        }
 
-        const unreadBadge = chatItem.querySelector('.badge');
-        if (unreadBadge) {
-            unreadBadge.textContent = data.unreadCount;
-        } else if (data.unreadCount > 0) {
-            const newBadge = document.createElement('span');
-            newBadge.className = 'badge bg-primary rounded-pill';
-            newBadge.textContent = data.unreadCount;
-            chatItem.appendChild(newBadge);
-        }
-        const timeElement = chatItem.querySelector('.last-message-time');
+    appendLocalMessage(message, mediaUrl = null) {
+        const localMessage = {
+            messageId: 'temp-' + Date.now(),
+            senderId: this.userId,
+            message: message,
+            mediaType: this.mediaType || 'text',
+            mediaUrl: mediaUrl,
+            time: this.formatTime(new Date()),
+        };
         
-        if (timeElement) {
-            timeElement.textContent = data.time;
-        }
+        this.appendMessage(localMessage, true);
+        this.scrollToBottom();
     }
-}
 
-// عرض إشعار بوصول رسالة جديدة
-function showNotification(data) {
-    // تحديث عدد الرسائل غير المقروءة في القائمة الجانبية
-    const chatItems = document.querySelectorAll('.chat-list .list-group-item');
-    
-    chatItems.forEach(item => {
-        const username = item.getAttribute('href').split('=')[1];
-        
-        // التحقق مما إذا كان الرابط يتوافق مع المرسل
-        if (data.senderName && username === data.senderName) {
-            // تحديث نص آخر رسالة
-            const lastMessageEl = item.querySelector('.flex-grow-1 small');
+    updateChatListItem(data) {
+        const chatItem = document.querySelector(`.chat-item[data-chat-id="${data.chatId}"]`);
+        if (chatItem) {
+            // تحديث آخر رسالة
+            const lastMessageEl = chatItem.querySelector('.last-message');
             if (lastMessageEl) {
-                const messagePreview = data.message && data.message.length > 20 
-                    ? data.message.substring(0, 20) + '...' 
-                    : data.message || 'صورة';
-                lastMessageEl.textContent = messagePreview;
+                lastMessageEl.textContent = data.lastMessage;
             }
             
-            // تحديث عدد الرسائل غير المقروءة
-            let badgeEl = item.querySelector('.badge');
-            if (!badgeEl) {
-                badgeEl = document.createElement('span');
-                badgeEl.className = 'badge bg-primary rounded-pill';
-                item.appendChild(badgeEl);
-            }
-            
-            const count = parseInt(badgeEl.textContent || '0') + 1;
-            badgeEl.textContent = count;
-            
-            // تحديث وقت آخر رسالة
-            const timeEl = item.querySelector('small.text-muted.ms-2');
+            // تحديث الوقت
+            const timeEl = chatItem.querySelector('.message-time');
             if (timeEl) {
-                const time = new Date(data.time).toLocaleTimeString('ar-SA', { hour: '2-digit', minute: '2-digit' });
-                timeEl.textContent = time;
+                timeEl.textContent = data.time;
             }
             
-            return;
+            // تحديث العداد
+            const unreadEl = chatItem.querySelector('.unread-count');
+            if (data.unreadCount > 0) {
+                if (!unreadEl) {
+                    const badge = document.createElement('span');
+                    badge.className = 'unread-count';
+                    chatItem.appendChild(badge);
+                }
+                if(this.receiverId == data.chatId){
+                    this.websocket.send(JSON.stringify({
+                        type: 'makRead',
+                        receiver: this.receiverId,
+                        sender: this.userId,
+                    }));
+                    console.log("dddddddddddddddddddddd")
+                }else{
+                    unreadEl.textContent = data.unreadCount;
+
+                }
+            } else if (unreadEl) {
+                // unreadEl.remove();
+            }
         }
-    });
-    
-    // يمكن إضافة إشعار صوتي أو رسالة منبثقة هنا
-    if ('Notification' in window && Notification.permission !== 'granted') {
-        Notification.requestPermission();
     }
-    if ('Notification' in window && Notification.permission === 'granted') {
-        const notification = new Notification('رسالة جديدة', {
-            body: `رسالة جديدة من ${data.senderName}`,
-            icon: `${URL_ROOT}/assets/uploads/profile/${data.senderPicture}`
+    handleStatusUpdate(data) {
+        console.log("Connection status:", data.status);
+    }
+
+    updateOnlineStatus(users) {
+        const statusElement = document.getElementById('userStatus');
+        if (!statusElement) return;
+        
+        const isOnline = users.includes(this.receiverId);
+        statusElement.textContent = isOnline ? 'متصل الآن' : 'غير متصل';
+        statusElement.className = isOnline ? 'online' : 'offline';
+    }
+
+    showNotification(data) {
+        // تحديث قائمة المحادثات
+        this.updateChatListItem({
+            chatId: data.senderId,
+            lastMessage: data.message || 'مرفق',
+            time: data.time,
+            unreadCount: 1
         });
         
-        notification.onclick = function() {
-            window.focus();
-            window.location.href = `${URL_ROOT}/chat/private.php?user=${data.senderName}`;
-        };
+        // إشعار سطح المكتب
+        if (Notification.permission === 'granted') {
+            new Notification(`رسالة جديدة من ${data.senderName}`, {
+                body: data.message || 'أرسل مرفق',
+                icon: `${this.URL_ROOT}/assets/uploads/profile/${data.senderPicture}`
+            });
+        }
+        
+        // صوت الإشعار
+        const audio = new Audio(`${this.URL_ROOT}/assets/sounds/notification.wav`);
+        audio.play();
     }
-    
-    // تشغيل صوت الإشعار
-    const audio = new Audio(`${URL_ROOT}/assets/sounds/notification.mp3`);
-    audio.play();
-}
 
-// معالجة اختيار ملف
-function handleFileSelect(e) {
-    const file = e.target.files[0];
-    if (!file) {
-        clearAttachment();
-        return;
+    handleFileSelect(e) {
+        const file = e.target.files[0];
+        if (!file) return;
+        
+        // تحديد نوع الوسائط
+        if (file.type.startsWith('image/')) {
+            this.mediaType = 'image';
+        } else if (file.type.startsWith('video/')) {
+            this.mediaType = 'video';
+        } else {
+            this.mediaType = 'file';
+        }
+        
+        this.mediaFile = file;
+        this.showAttachmentPreview(file);
     }
-    
-    // التحقق من حجم الملف (10MB كحد أقصى)
-    const maxSize = 10 * 1024 * 1024;
-    if (file.size > maxSize) {
-        alert('حجم الملف كبير جدًا. الحد الأقصى هو 10 ميجابايت.');
-        clearAttachment();
-        return;
-    }
-    
-    // حفظ مرجع الملف
-    mediaFile = file;
-    
-    // عرض معاينة المرفق
-    const attachmentPreview = document.getElementById('attachmentPreview');
-    const attachmentName = document.getElementById('attachmentName');
-    const attachmentIcon = document.getElementById('attachmentIcon');
-    
-    attachmentName.textContent = file.name;
-    
-    // تعيين أيقونة مناسبة
-    if (mediaType === 'image') {
-        attachmentIcon.className = 'fas fa-image me-2';
-    } else if (mediaType === 'video') {
-        attachmentIcon.className = 'fas fa-video me-2';
-    } else if (mediaType === 'audio') {
-        attachmentIcon.className = 'fas fa-microphone me-2';
-    } else {
-        attachmentIcon.className = 'fas fa-file me-2';
-    }
-    
-    attachmentPreview.classList.remove('d-none');
-}
 
-// إزالة المرفق
-function clearAttachment() {
-    mediaFile = null;
-    mediaType = 'text';
-    
-    const fileInput = document.getElementById('fileInput');
-    const attachmentPreview = document.getElementById('attachmentPreview');
-    
-    if (fileInput) {
-        fileInput.value = '';
+    showAttachmentPreview(file) {
+        const previewDiv = document.getElementById('attachmentPreview');
+        const fileNameSpan = document.getElementById('attachmentName');
+        
+        fileNameSpan.textContent = file.name;
+        previewDiv.style.display = 'flex';
     }
-    
-    if (attachmentPreview) {
-        attachmentPreview.classList.add('d-none');
+
+    clearMessageInput() {
+        document.getElementById('messageInput').value = '';
+        this.clearAttachment();
+    }
+
+    clearAttachment() {
+        document.getElementById('fileInput').value = '';
+        document.getElementById('attachmentPreview').style.display = 'none';
+        this.mediaFile = null;
+        this.mediaType = null;
+    }
+
+    scrollToBottom() {
+        const container = document.getElementById('messagesContainer');
+        if (container) {
+            container.scrollTop = container.scrollHeight;
+        }
+    }
+
+    formatTime(date) {
+        console.log(date,"datedatedatedatedatedatedatedate")
+        return date.toLocaleTimeString('ar-SA', { hour: '2-digit', minute: '2-digit' });
+
     }
 }

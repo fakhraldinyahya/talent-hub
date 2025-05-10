@@ -101,19 +101,19 @@ function setupFormEvents() {
     // تحقق بسيط من كلمة المرور
     const passwordFields = document.querySelectorAll('input[type="password"]');
     
-    passwordFields.forEach(field => {
-        if (field.id.includes('password')) {
-            const form = field.closest('form');
-            if (form) {
-                form.addEventListener('submit', function(e) {
-                    if (field.value.length < 6) {
-                        alert('يجب أن تكون كلمة المرور 6 أحرف على الأقل');
-                        e.preventDefault();
-                    }
-                });
-            }
-        }
-    });
+    // passwordFields.forEach(field => {
+    //     if (field.id.includes('password')) {
+    //         const form = field.closest('form');
+    //         if (form) {
+    //             form.addEventListener('submit', function(e) {
+    //                 if (field.value.length < 6) {
+    //                     alert('يجب أن تكون كلمة المرور 6 أحرف على الأقل');
+    //                     e.preventDefault();
+    //                 }
+    //             });
+    //         }
+    //     }
+    // });
     
     // معاينة الصور قبل التحميل
     const imageInputs = document.querySelectorAll('input[type="file"][accept*="image"]');

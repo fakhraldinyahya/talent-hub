@@ -89,7 +89,7 @@ $page_title = $post_data->title;
 require_once '../includes/header.php';
 ?>
 
-<div class="container mt-5">
+<div class="container mt-3">
     <div class="row">
         <div class="col-md-8">
             <!-- بطاقة المنشور -->

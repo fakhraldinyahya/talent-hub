@@ -9,6 +9,9 @@ define('UPLOAD_DIR', APP_ROOT . '/assets/uploads/');
 define('PROFILE_PIC_DIR', UPLOAD_DIR . 'profile/');
 define('POSTS_MEDIA_DIR', UPLOAD_DIR . 'posts/');
 
+date_default_timezone_set('Asia/Riyadh'); // أو التوقيت المناسب
+
+
 // تكوين قاعدة البيانات
 define('DB_HOST', 'localhost');
 define('DB_USER', 'root');
@@ -20,23 +23,27 @@ define('WS_HOST', '127.0.0.1');
 define('WS_PORT', 8080);
 
 // دالة مساعدة لتوجيه المستخدم
-function redirect($page) {
+function redirect($page)
+{
     header('Location: ' . URL_ROOT . '/' . $page);
     exit;
 }
 
 // دالة للتحقق من تسجيل دخول المستخدم
-function isLoggedIn() {
+function isLoggedIn()
+{
     return isset($_SESSION['user_id']);
 }
 
 // دالة للتحقق من صلاحيات المسؤول
-function isAdmin() {
+function isAdmin()
+{
     return isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'admin';
 }
 
 // دالة لعرض رسائل الخطأ
-function flash($message, $type = 'danger') {
+function flash($message, $type = 'danger')
+{
     if (!isset($_SESSION['flash'])) {
         $_SESSION['flash'] = array();
     }
@@ -44,7 +51,8 @@ function flash($message, $type = 'danger') {
 }
 
 // دالة لعرض رسائل الخطأ المخزنة
-function display_flash() {
+function display_flash()
+{
     if (isset($_SESSION['flash'])) {
         foreach ($_SESSION['flash'] as $flash) {
             echo '<div class="alert alert-' . $flash['type'] . ' alert-dismissible fade show" role="alert">
@@ -57,9 +65,18 @@ function display_flash() {
 }
 
 // دالة لتنظيف المدخلات
-function sanitize($data) {
+function sanitize($data)
+{
     $data = trim($data);
     $data = stripslashes($data);
     $data = htmlspecialchars($data);
     return $data;
+}
+
+function formatTimeArabic($timeString)
+{
+    $date = new DateTime($timeString);
+    $time = $date->format('h:i');
+    $period = $date->format('A') == 'AM' ? 'ص' : 'م';
+    return $time . ' ' . $period; // مثل: 02:30 م
 }

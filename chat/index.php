@@ -35,7 +35,7 @@ $page_scripts = ['chat.js'];
 require_once '../includes/header.php';
 ?>
 
-<div class="container mt-5">
+<div class="container mt-3">
     <div class="row">
         <div class="col-lg-3 mb-4">
             <div class="card shadow-sm">
@@ -78,7 +78,7 @@ require_once '../includes/header.php';
                                     </div>
                                 <?php else: ?>
                                     <?php foreach ($private_chats as $chat_item): ?>
-                                        <a href="<?php echo URL_ROOT; ?>/chat/private.php?user=<?php echo $chat_item->username; ?>" class="list-group-item list-group-item-action d-flex align-items-center">
+                                        <a href="<?php echo URL_ROOT; ?>/chat/private.php?user=<?php echo $chat_item->username; ?>" data-chat-id="<?php echo $chat_item->id; ?>" class="list-group-item chat-item list-group-item-action d-flex align-items-center">
                                             <div class="position-relative">
                                                 <img src="<?php echo URL_ROOT; ?>/assets/uploads/profile/<?php echo $chat_item->profile_picture; ?>" class="rounded-circle me-2" width="40" height="40" alt="صورة المستخدم">
                                                 <?php if ($chat_item->is_online): ?>
@@ -90,9 +90,11 @@ require_once '../includes/header.php';
                                                 <small class="text-muted"><?php echo $chat_item->last_message ? (strlen($chat_item->last_message) > 20 ? substr($chat_item->last_message, 0, 20) . '...' : $chat_item->last_message) : 'لا توجد رسائل'; ?></small>
                                             </div>
                                             <?php if ($chat_item->unread_count > 0): ?>
-                                                <span class="badge bg-primary rounded-pill"><?php echo $chat_item->unread_count; ?></span>
+                                                <span class="badge bg-danger rounded-pill unread-count"><?php echo $chat_item->unread_count; ?></span>
+                                            <?php else : ?>
+                                                <span class="badge bg-danger rounded-pill unread-count"></span>
                                             <?php endif; ?>
-                                            <small class="text-muted last-message-time ms-2"><?php echo $chat_item->last_message_time ? date('H:i', strtotime($chat_item->last_message_time)) : ''; ?></small>
+                                            <small class="text-muted  ms-2 message-time"><?php echo $chat_item->last_message_time ? date('H:i', strtotime($chat_item->last_message_time)) : ''; ?></small>
                                         </a>
                                     <?php endforeach; ?>
                                 <?php endif; ?>
@@ -117,7 +119,7 @@ require_once '../includes/header.php';
                                                 <small class="text-muted"><?php echo $group->last_message ? (strlen($group->last_message) > 20 ? substr($group->last_message, 0, 20) . '...' : $group->last_message) : 'لا توجد رسائل'; ?></small>
                                             </div>
                                             <?php if ($group->unread_count > 0): ?>
-                                                <span class="badge bg-primary rounded-pill"><?php echo $group->unread_count; ?></span>
+                                                <span class="badge bg-danger rounded-pill"><?php echo $group->unread_count; ?></span>
                                             <?php endif; ?>
                                             <small class="text-muted ms-2"><?php echo $group->last_message_time ? date('H:i', strtotime($group->last_message_time)) : ''; ?></small>
                                         </a>
@@ -136,7 +138,7 @@ require_once '../includes/header.php';
                     <div class="text-center">
                         <i class="fas fa-comments fa-4x text-muted mb-3"></i>
                         <h4>اختر محادثة للبدء</h4>
-                        <p class="text-muted">يمكنك البدء بالدردشة مع أصدقائك أو إنشاء مجموعة جديدة.</p>
+                        <p class="text-muted">يمكنك البدء بالدردشة مع أصدقائك .</p>
                         <div class="mt-3">
                             <button class="btn btn-primary me-2" data-bs-toggle="modal" data-bs-target="#newChatModal">
                                 <i class="fas fa-user me-1"></i>دردشة جديدة
@@ -188,8 +190,8 @@ require_once '../includes/header.php';
         const wsUrl = 'ws://<?php echo WS_HOST; ?>:<?php echo WS_PORT; ?>';
         const URL_ROOT = "<?php echo 'http://localhost/talent-hub'; ?>";
 
-        initializeChat(wsUrl, currentUserId, chatUserId);
-
+        // initializeChat(wsUrl, currentUserId, chatUserId);
+        window.chatApp = new ChatApp(currentUserId, chatUserId, wsUrl);
         searchUser.addEventListener('input', function() {
             const query = this.value.trim();
             if (query.length < 2) {

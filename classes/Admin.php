@@ -85,27 +85,6 @@ class Admin {
         return $this->db->execute();
     }
     
-    // حظر مستخدم (تنفيذ افتراضي بسيط)
-    public function banUser($userId) {
-        $this->db->query('UPDATE users SET is_banned = 1 WHERE id = :id');
-        
-        // ربط القيم
-        $this->db->bind(':id', $userId);
-        
-        // تنفيذ
-        return $this->db->execute();
-    }
-    
-    // إلغاء حظر مستخدم
-    public function unbanUser($userId) {
-        $this->db->query('UPDATE users SET is_banned = 0 WHERE id = :id');
-        
-        // ربط القيم
-        $this->db->bind(':id', $userId);
-        
-        // تنفيذ
-        return $this->db->execute();
-    }
     
     // حذف مستخدم
     public function deleteUser($userId) {

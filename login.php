@@ -20,20 +20,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // الحصول على بيانات النموذج
     $email = sanitize($_POST['email']);
     $password = sanitize($_POST['password']);
-    
+
     // التحقق من الحقول المطلوبة
     if (empty($email)) {
         $errors[] = 'البريد الإلكتروني مطلوب';
     }
-    
+
     if (empty($password)) {
         $errors[] = 'كلمة المرور مطلوبة';
     }
-    
+
     // إذا لم تكن هناك أخطاء، حاول تسجيل الدخول
     if (empty($errors)) {
         $login_result = $user->login($email, $password);
-        
+
         if ($login_result) {
             // إنشاء جلسة وتوجيه المستخدم
             $_SESSION['user_id'] = $login_result->id;
@@ -71,15 +71,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             </ul>
                         </div>
                     <?php endif; ?>
-                    
+
                     <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="POST">
                         <div class="mb-3">
                             <label for="email" class="form-label">البريد الإلكتروني</label>
-                            <input type="email" name="email" id="email" class="form-control" value="<?php echo isset($_POST['email']) ? $_POST['email'] : ''; ?>" required>
+                            <input type="email" name="email" id="email" class="form-control" value="<?php echo isset($_POST['email']) ? $_POST['email'] : ''; ?>">
                         </div>
                         <div class="mb-3">
                             <label for="password" class="form-label">كلمة المرور</label>
-                            <input type="password" name="password" id="password" class="form-control" required>
+                            <input type="password" name="password" id="password" class="form-control">
                         </div>
                         <div class="d-grid">
                             <button type="submit" class="btn btn-primary">تسجيل الدخول</button>
@@ -89,6 +89,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <div class="card-footer text-center">
                     <p class="mb-0">ليس لديك حساب؟ <a href="register.php">إنشاء حساب جديد</a></p>
                 </div>
+
+                <div class="text-center mt-3">
+                    <a href="forgot-password.php" class="btn btn-link">هل نسيت كلمة المرور؟</a>
+                </div>
+
             </div>
         </div>
     </div>

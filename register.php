@@ -125,41 +125,38 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <label for="username" class="form-label">اسم المستخدم</label>
-                                <input type="text" name="username" id="username" class="form-control" value="<?php echo isset($_POST['username']) ? $_POST['username'] : ''; ?>" required>
+                                <input type="text" name="username" id="username" class="form-control" value="<?php echo isset($_POST['username']) ? $_POST['username'] : ''; ?>" >
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label for="email" class="form-label">البريد الإلكتروني</label>
-                                <input type="email" name="email" id="email" class="form-control" value="<?php echo isset($_POST['email']) ? $_POST['email'] : ''; ?>" required>
+                                <input type="text" name="email" id="email" class="form-control" value="<?php echo isset($_POST['email']) ? $_POST['email'] : ''; ?>" >
                             </div>
                         </div>
                         <div class="mb-3">
                             <label for="full_name" class="form-label">الاسم الكامل</label>
-                            <input type="text" name="full_name" id="full_name" class="form-control" value="<?php echo isset($_POST['full_name']) ? $_POST['full_name'] : ''; ?>" required>
+                            <input type="text" name="full_name" id="full_name" class="form-control" value="<?php echo isset($_POST['full_name']) ? $_POST['full_name'] : ''; ?>" >
                         </div>
                         <div class="mb-3">
                             <label for="category" class="form-label">فئة الموهبة *</label>
-                            <select class="form-select" id="category" name="category" required>
+                            <select class="form-select" id="category" name="category" >
                                 <option value="">-- اختر فئة --</option>
-                                <option value="programming" <?= (($_POST['category'] ?? '') == 'programming') ? 'selected' : '' ?>>البرمجة</option>
-                                <option value="engineering" <?= (($_POST['category'] ?? '') == 'civil_engineering') ? 'selected' : '' ?>>الهندسة </option>
-                                <option value="artificial_intelligence" <?= (($_POST['category'] ?? '') == 'artificial_intelligence') ? 'selected' : '' ?>> الذكاء الاصطناعي</option>
-                                <option value="design" <?= (($_POST['category'] ?? '') == 'design') ? 'selected' : '' ?>> التصميم</option>
-                                <option value="drawing" <?= (($_POST['category'] ?? '') == 'drawing') ? 'selected' : '' ?>>الرسم</option>
-                                <option value="music" <?= (($_POST['category'] ?? '') == 'music') ? 'selected' : '' ?>>الموسيقى</option>
-                                <option value="photography" <?= (($_POST['category'] ?? '') == 'photography') ? 'selected' : '' ?>>التصوير</option>
-                                <option value="writing" <?= (($_POST['category'] ?? '') == 'writing') ? 'selected' : '' ?>>الكتابة</option>
-                                <option value="acting" <?= (($_POST['category'] ?? '') == 'acting') ? 'selected' : '' ?>>التمثيل</option>
+                                <option value="programming" <?= (($_POST['category'] ?? '') == 'programming') ? 'selected' : '' ?>>قسم البرمجة</option>
+                                <option value="drawing" <?= (($_POST['category'] ?? '') == 'drawing') ? 'selected' : '' ?>>قسم الرسم</option>
+                                <option value="photography" <?= (($_POST['category'] ?? '') == 'photography') ? 'selected' : '' ?>> قسم التصوير الفوتوغرافي</option>
+                                <option value="fashion" <?= (($_POST['category'] ?? '') == 'fashion') ? 'selected' : '' ?>> قسم تصميم الأزياء</option>
+                                <option value="reading" <?= (($_POST['category'] ?? '') == 'reading') ? 'selected' : '' ?>>قسم القراءة</option>
+                                <option value="poetry" <?= (($_POST['category'] ?? '') == 'poetry') ? 'selected' : '' ?>>قسم الإلقاء والشعر</option>
                                 <option value="other" <?= (($_POST['category'] ?? '') == 'other') ? 'selected' : '' ?>>أخرى</option>
                             </select>
                         </div>
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <label for="password" class="form-label">كلمة المرور</label>
-                                <input type="password" name="password" id="password" class="form-control" required>
+                                <input type="password" name="password" id="password" class="form-control" >
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label for="confirm_password" class="form-label">تأكيد كلمة المرور</label>
-                                <input type="password" name="confirm_password" id="confirm_password" class="form-control" required>
+                                <input type="password" name="confirm_password" id="confirm_password" class="form-control" >
                             </div>
                         </div>
                         <div class="mb-3">
